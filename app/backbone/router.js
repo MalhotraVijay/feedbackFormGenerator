@@ -3,8 +3,8 @@ window.app = window.app || {};
 
 app.mainRoutes = Backbone.Router.extend({
     routes: {
-        "customer/add": "create",
-        "customer/list": "listAll",
+        "feedback/add": "create",
+        "feedback/livePromo": "listAll",
     },
     
     initialize: function(){

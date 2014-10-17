@@ -1,17 +1,22 @@
+
 <html>
 
 <head>
+   
     <title>Dashboard</title>
+    <meta charset="UTF-8">
     <link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
     <script src="../../bower_components/underscore/underscore.js"></script>
     <script src="../../bower_components/backbone/backbone.js"></script>
     <script src="../../app/backbone/router.js"></script>
-    <script src="../../app/backbone/models/customerModels.js"></script>
-    <script src="../../app/backbone/views/customerViews.js"></script>
+    <script src="../../app/backbone/models/feedbackModels.js"></script>
+    <script src="../../app/backbone/views/feedbackViews.js"></script>
     <!--    <link href="../static/css/appstyle.css" rel="stylesheet" />-->
     <script type="text/javascript">
         $(document).ready(function () {
+            
+            
 
         });
     </script>
@@ -39,11 +44,11 @@
                     <div class="row">
                         <div class="col-md-4"></div>
                         <div class="col-md-4">
-                            <a href="#customer/add">
-                                <button class="btn btn-primary">Add Customers</button>
+                            <a href="#feedback/add">
+                                <button class="btn btn-primary">Form builder</button>
                             </a>
-                            <a href="#customer/list">
-                                <button class="btn btn-primary">List Customers</button>
+                            <a href="#feedback/livePromo">
+                                <button class="btn btn-primary">View Live Promo</button>
                             </a>
                         </div>
                         <div class="col-md-4"></div>
@@ -53,17 +58,7 @@
 
                     
                 </div>
-                <div class="col-md-2">
-                    <div style="height:30%; border-left: 1px solid #ccc; padding-right:2px;" class="pull-left"></div>
-                    <ul class="nav bs-docs-sidenav pull-left">
-                        <li class="active">
-                            <a href="#glyphicons">Customers</a>
-                        </li>
-                        <li class="active">
-                            <a href="#glyphicons">Templates</a>
-                        </li>
-                    </ul>
-                </div>
+                <div class="col-md-2"></div>
             </div>
         </div>
     </div>
@@ -71,6 +66,9 @@
     
     
     <!-- keeping the views templates static now -->
+    
+
+    
     
     <script type="text/template" id="addCustomerTemplate">
         <div class="col-md-3"></div>
@@ -80,32 +78,24 @@
                 <form role="form" method="post" action="/login">
 
                     <div class="form-group">
-                        <input type="text" class="form-control" id="firstName" placeholder="First Name" name="firstName">
+                        <input type="text" class="form-control" id="firstName" placeholder="Field title" name="firstName">
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" id="LastName" placeholder="Last Name" name="LastName">
+                        <input type="text" class="form-control" id="LastName" placeholder="Field Help" name="LastName">
                     </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control" id="mobile" placeholder="Mobile Number" name="mobile">
-                    </div>
-
-                    <div class="col-md-2">
-                        <span class="radio">
-                        <label>
-                            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>Male
-                        </label>
-                    </span>
-                    </div>
-                    <div class="col-md-3">
-                        <span class="radio">
-                        <label>
-                            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" >Female
-                        </label>
-                    </span>
-                    </div>
+                        <div class="selectCategroy">
+                            <select name="" id="" class="form-control">
+                                <option value="">Inputbox</option>
+                                <option value="">Textbox</option>
+                                <option value="">Checkbox</option>
+                                <option value="">RadioButton</option>
+                                <option value="">ListBox</option>
+                            </select>
+                        </div>
+                        <div><br></div>
 
                     <div align="center">
-                        <input type="submit" value="Add Customer" class="btn btn-primary" />
+                        <input type="submit" value="Add field" class="btn btn-primary" />
                     </div>
                 </form>
             </div>
