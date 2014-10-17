@@ -1,0 +1,141 @@
+<html>
+
+<head>
+    <title>Dashboard</title>
+    <link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../../bower_components/underscore/underscore.js"></script>
+    <script src="../../bower_components/backbone/backbone.js"></script>
+    <script src="../../app/backbone/router.js"></script>
+    <script src="../../app/backbone/models/customerModels.js"></script>
+    <script src="../../app/backbone/views/customerViews.js"></script>
+    <!--    <link href="../static/css/appstyle.css" rel="stylesheet" />-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+    </script>
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="navbar navbar-inverse" role="navigation">
+                <div id="companyLogo" style="float:left; margin-left: 15px;">
+                    <img src="../media/images/company-logo.jpg" width="100px; height;inherit;" />
+                </div>
+                <div class="pull-right">
+                    <button type="button" class="btn">logout</button>
+                </div>
+            </nav>
+        </div>
+        <div class="container" id="DashBoardDiv">
+            <div class="row">
+                <br>
+            </div>
+            <div class="row">
+                <div class="col-md-10" >
+                    <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                            <a href="#customer/add">
+                                <button class="btn btn-primary">Add Customers</button>
+                            </a>
+                            <a href="#customer/list">
+                                <button class="btn btn-primary">List Customers</button>
+                            </a>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                    <div class="row"><br></div>
+                    <div class="row" id="primaryTemplate"></div>
+
+                    
+                </div>
+                <div class="col-md-2">
+                    <div style="height:30%; border-left: 1px solid #ccc; padding-right:2px;" class="pull-left"></div>
+                    <ul class="nav bs-docs-sidenav pull-left">
+                        <li class="active">
+                            <a href="#glyphicons">Customers</a>
+                        </li>
+                        <li class="active">
+                            <a href="#glyphicons">Templates</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <!-- keeping the views templates static now -->
+    
+    <script type="text/template" id="addCustomerTemplate">
+        <div class="col-md-3"></div>
+
+        <div class="col-md-6">
+            <div class="form-layer">
+                <form role="form" method="post" action="/login">
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="firstName" placeholder="First Name" name="firstName">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="LastName" placeholder="Last Name" name="LastName">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="mobile" placeholder="Mobile Number" name="mobile">
+                    </div>
+
+                    <div class="col-md-2">
+                        <span class="radio">
+                        <label>
+                            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>Male
+                        </label>
+                    </span>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="radio">
+                        <label>
+                            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" >Female
+                        </label>
+                    </span>
+                    </div>
+
+                    <div align="center">
+                        <input type="submit" value="Add Customer" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </script>
+    
+    <script type="text/template" id="listCustomerTemplate">
+        <div class="col-md-3"></div>
+
+        <div class="col-md-6">
+            <div class="form-layer">
+                List of all customers from db !
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </script>
+    
+    
+    
+    
+
+    <script type="text/javascript">
+        var router = new app.mainRoutes();
+
+         //initiate Backbone to listen to the urls
+        Backbone.history.start();
+    </script>
+</body>
+
+</html>
+
+</html>
