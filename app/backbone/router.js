@@ -18,19 +18,19 @@ app.mainRoutes = Backbone.Router.extend({
     },
 
     addElement: function () {
-        this.currentView = new app.FormIndexView();
+        this.currentView = new app.Views.FormIndexView();
         $('#primaryTemplate').html(this.currentView.render().el);
     },
 
     liveView: function () {
-        this.currentView = new app.FormLiveListView();
+        this.currentView = new app.Views.FormLiveListView();
         $('#primaryTemplate').html(this.currentView.render().el);
     },
     
     index: function () {
         //get the currentView and add that to the viewport
         
-        this.currentView = new app.FormIndexView({});    
+        this.currentView = new app.Views.FormIndexView({});    
         $('#primaryTemplate').html(this.currentView.render().el);
     }
 

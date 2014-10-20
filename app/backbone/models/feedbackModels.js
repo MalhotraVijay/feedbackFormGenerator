@@ -1,6 +1,6 @@
 app.Models.FormElementModel = Backbone.Model.extend({
     defaults: {
-    fieldName: "",
+    fieldTitle: "",
     fieldHelp: "",
     fieldType: ""
   }
@@ -15,5 +15,5 @@ app.Collections.FormElementCollection = Backbone.Collection.extend({
 
 
 //Initiate a model
-var formElement = new app.Models.FormElementModel();
-console.log(formElement);
+//var formElement = new app.Models.FormElementModel();
+//console.log(formElement);
