@@ -1,4 +1,4 @@
-app.CustomerIndexView = Backbone.View.extend({
+app.FormIndexView = Backbone.View.extend({
     
     className: 'row',
     
@@ -6,18 +6,21 @@ app.CustomerIndexView = Backbone.View.extend({
     },
     
     render: function(){
-        this.$el.html($("#addCustomerTemplate").html());
+        this.$el.html($("#formBuilderTemplate").html());
         return this;
     },
 
 });
 
-app.CustomerNewView = Backbone.View.extend({
+app.FormElementAddView = Backbone.View.extend({
+    
+    
+    
 
 });
 
 
-app.CustomerListView = Backbone.View.extend({
+app.FormLiveListView = Backbone.View.extend({
     
     className: 'row',
     
@@ -25,12 +28,12 @@ app.CustomerListView = Backbone.View.extend({
     },
     
     render: function(){
-        this.$el.html($("#listCustomerTemplate").html());
+        this.$el.html($("#liveViewTemplate").html());
         return this;
     },
 
 });
 
 
-var customerView = new app.CustomerNewView();
-console.log(customerView);
+var formElementView = new app.FormElementAddView();
+console.log(formElementView);
