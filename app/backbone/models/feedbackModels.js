@@ -1,8 +1,10 @@
 app.Models.FormElementModel = Backbone.Model.extend({
     defaults: {
+    id :"",
     fieldTitle: "",
     fieldHelp: "",
-    fieldType: ""
+    fieldType: "",
+    fieldValues: []
   }
     
 });

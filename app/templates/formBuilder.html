@@ -6,23 +6,41 @@
     <title>Dashboard</title>
     <meta charset="UTF-8">
     
+    <script src="../../bower_components/jquery/dist/jquery.min.js"></script> 
     <link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+   
     <script src="../../bower_components/underscore/underscore.js"></script>
     <script src="../../bower_components/backbone/backbone.js"></script>
-
+    
+    <style type="text/css">
+        #feedbackForm{
+            padding:10px;
+        }
+    </style>
     
     <script type="text/javascript">
-
-        var formSource="";
+        
         $(document).ready(function () {
-            formSource="";
+            
+            var formElementCollection = new app.Collections.FormElementCollection;
+            
+            var id= 0;
             
             $("#addFieldButton").click(function(){
+                
+                //check for the values 
+                var fieldValues = [];
+                if($("#fieldValues").val() != undefined && $("#fieldValues").val() != ""  ){
+                    fieldValues = $("#fieldValues").val().split(',');
+                }
+                
                 var formItems = {
+                    id:id++,
                     fieldTitle : $("#fieldTitle").val(),
                     fieldHelp : $("#fieldHelp").val(),
-                    fieldType : $("#fieldType").val() 
+                    fieldType : $("#fieldType").val(),
+                    fieldValues : fieldValues
                 }
                 
                 //create a formelement model and update the fields
@@ -31,115 +49,55 @@
                 for(element in formItems){
                     formElement.set(element,formItems[element]);
                 }
-                console.log(formElement);
+                //console.log(formElement);
+                                
+                //create a form view ( not needed , this is called in the collection addOne)
+//                var formElementView = new app.Views.FormElementAddView({model: formElement});
+//                console.log(formElementView);
                 
                 
-                //create a form view 
-                var formElementView = new app.Views.FormElementAddView({model: formElement});
+                //add to the new model everytime to the collection
+                formElementCollection.add(formElement);
+                console.log(formElementCollection);
                 
-                console.log(formElementView);
+                //call the view for the collection
+                var formElementCollectionView = new app.Views.FormElementCollectionView({ collection : formElementCollection });
+                var formHTML = formElementCollectionView.render().el;
                 
                 
-               
+                //add the form to the html
+                $('#feedbackForm').html(formHTML);
+                
+                //add the form text to the html
+                var formHtmlCode = $('#feebackFormHtmlContainer').html();
+                formHtmlCode = formHtmlCode.replace(/<a href="#" class="delete btn btn-small btn-danger">X<\/a>/g,'')
+                $('#htmlTemplate').text(formHtmlCode);
+                
             });
             
             
-//            $("#addFieldButton").click(function(e){
-//                e.preventDefault();
-//                var fieldTitle = $("#fieldTitle").val();
-//                var fieldHelp = $("#fieldHelp").val();
-//                var fieldType = $("#fieldType").val();
-//
-//                if(fieldType=="inputBox")
-//                {
-//                    addBr();
-//                    addInputBox(fieldTitle,fieldHelp);
-//                    $("#fieldTitle").val("");
-//                    $("#fieldHelp").val("");
-//                }
-//                if(fieldType=="textArea")
-//                {
-//                    addBr();
-//                    addTextArea(fieldTitle,fieldTitle);
-//                    $("#fieldTitle").val("");
-//                    $("#fieldHelp").val("");
-//                }
-//                if(fieldType=="radioButton")
-//                {
-//                    addBr();
-//                    addRadioButton(fieldTitle,fieldHelp);
-//                    $("#fieldTitle").val("");
-//                    $("#fieldHelp").val("");
-//                }
-//                if(fieldType=="checkBox")
-//                {
-//                    addBr();
-//                    addCheckBox(fieldTitle,fieldHelp);
-//                    $("#fieldTitle").val("");
-//                    $("#fieldHelp").val("");
-//                }
-//            });
-//
-//
-//            $("#promoButton").click(function(e){
-//            e.preventDefault();
-//            $("#feedback").html(formSource);
-//            });
+            $('select#fieldType').change(function(){
+                if($(this).val()=="checkBox"||
+                    $(this).val() == "radioButton" ||
+                    $(this).val() == "listBox"){
+                    var inputElement = '<input type="text" class="form-control" id="fieldValues" placeholder="Comma seperated field values" name="fieldValues">'
+                    $("#fieldValuesDiv").html(inputElement);
+                }else{
+                    $("#fieldValuesDiv").html("")
+                }
+            });
+            
+            $('#promoButton').click(function(){
+                $(".modal-body").html($('#htmlTemplate').text());
+               $("#myModal").modal({});
+            });
+            
+            
+            
+            
+            
         });
 
-
-
-        function addBr()
-        {
-            formSource +="</br>";
-        }
-
-        function addInputBox(name,help)
-        {
-            console.log(name);
-            console.log(help);
-            
-            elementContainer = '<div class="form-element"></div>';
-            $("#feedback").add(elementContainer);
-            
-            
-            
-            formSource+= '<label><B>'+name+'</B></label></br>';
-            formSource +='<input type="text" class="form-control" id="'+name+'" placeholder="'+help+'" name="'+name+'">';
-            console.log(formSource);
-        }
-
-        function addTextArea(name,help)
-        {
-            formSource+= '<label><B>'+name+'</B></label></br>';
-            formSource+= '<textarea name="'+name+'" id="'+name+'">'+help+'</textarea>';
-        }
-
-        function addCheckBox(title,name)
-        {
-            formSource+= '<label><B>'+title+'</B></label></br>';
-            checkBoxArr = name.split(",");
-            for(i=0;i<checkBoxArr.length;i++)
-            {
-                tempName = checkBoxArr[i].trim();
-                formSource +='<input type="checkbox" class="checkbox" id="'+tempName+'" name="'+tempName+'">';
-                formSource+= '<label>'+tempName+'</label>';
-                addBr();
-            }
-        }
-
-        function addRadioButton(title,name)
-        {
-            formSource+= '<label><B>'+title+'</B></label></br>';
-            RadioButtonArr = name.split(",");
-            for(i=0;i<RadioButtonArr.length;i++)
-            {
-                tempName = RadioButtonArr[i].trim();
-                formSource +='<input type="radio" class="checkbox" id="'+tempName+'" name="'+tempName+'">';
-                formSource+= '<label>'+tempName+'</label>';
-                addBr();
-            }
-        }
     </script>
 
 </head>
@@ -148,49 +106,76 @@
     <div class="container-fluid">
         <div class="row">
             <nav class="navbar navbar-inverse" role="navigation">
-                <div id="companyLogo" style="float:left; margin-left: 15px;">
-                    <img src="../media/images/company-logo.jpg" width="100px; height;inherit;" />
-                </div>
-                <div class="pull-right">
-                    <button type="button" class="btn">logout</button>
-                </div>
+                
             </nav>
         </div>
-        <div class="container" id="DashBoardDiv">
+        <div class="container-fluid" id="DashBoardDiv">
             <div class="row">
                 <br>
             </div>
             <div class="row">
-                <div class="col-md-10" >
-                    <div class="row">
-                        <div class="col-md-4"></div>
-                        <div class="col-md-4">
-                            <a href="#feedback/add">
-                                <button class="btn btn-primary">Form builder</button>
-                            </a>
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <a href="#feedback/add">
+                        <button class="btn btn-primary">Form builder</button>
+                    </a>
 
-                            <button class="btn btn-primary" id="promoButton">View Live Promo</button>
-                        </div>
-                        <div class="col-md-4"></div>
-                    </div>
-                    <div class="row"><br></div>
-                    <div class="row" id="primaryTemplate"></div>
-
-                    
+                    <button class="btn btn-primary" id="promoButton">View Live Promo</button>
                 </div>
-                <div class="col-md-2"></div>
+                <div class="col-md-4"></div>
             </div>
+            
+            <div class="row"><br></div>
+            
+            <div class="row" id="primaryTemplate"></div>
+
+            <div class="row" id="output" style="margin-top:3%;">
+                
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <code id="htmlTemplate" style="display:block;white-space:pre-wrap;"></code>
+                </div>
+                <div class="col-md-3"></div>
+                
+            </div>
+            
+            <div class="row"><br><br></div>
+            
+                
+            
         </div>
+<!--        Live promo modal show -->
+       
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+        
+        
+        
     </div>
 
     <!-- keeping the backbone templates static now -->
 
     <script type="text/template" id="formBuilderTemplate">
-        <div class="col-md-3"></div>
+        <div class="col-md-1"></div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="form-layer">
-                <form role="form" method="post" action="">
+                <form role="form" method="get" id="formGeneratorWidget" action="">
 
                     <div class="form-group">
                         <input type="text" class="form-control" id="fieldTitle" placeholder="Field title" name="fieldTitle">
@@ -208,42 +193,89 @@
                             </select>
                         </div>
                         <div><br></div>
+                        <div class="form-group" id="fieldValuesDiv"></div>
 
                     <div align="center">
                         <input type="button" value="Add field" class="btn btn-primary" id="addFieldButton" />
                     </div>
                 </form>
 
-                <form role="form" method="post" id="feedback" name="feedback">
-
-                </form>
-
             </div>
         </div>
-        <div class="col-md-3"></div>
+        <div class="col-md-2"> </div>
+        <div class="col-md-4" id="feebackFormHtmlContainer">
+            <form role="form" method="post" id="feedbackForm" name="feedbackForm">
+
+            </form>
+        </div>
     </script>
     
     <script type="text/template" id="liveViewTemplate">
-        <div class="col-md-3"></div>
+        <div class="col-md-1"></div>
 
-        <div class="col-md-6">
-            <div class="form-layer">
+        <div class="col-md-9">
+            <div class="form-group">
                 This should ideally be the live promo !
             </div>
         </div>
-        <div class="col-md-3"></div>
+        <div class="col-md-2"> <a href="#" class="delete btn btn-small btn-danger">X</a></div>
     </script>
-    
-    
+     
     <script type="text/template" id="inputBoxtemplate">
-        <div class="col-md-3"></div>
+        <div class="col-md-1"></div>
 
-        <div class="col-md-6">
-            <div class="form-layer">
+        <div class="col-md-9">
+            <div class="form-group">
                <input type="text" name="{{ fieldTitle  }}" id=" {{ fieldHelp }}" placeholder="{{ fieldHelp }}" class="form-control" >
             </div>
         </div>
-        <div class="col-md-3"></div>
+        <div class="col-md-2"><a href="#" class="delete btn btn-small btn-danger">X</a></div>
+    </script>
+    
+    <script type="text/template" id="textAreatemplate">
+        <div class="col-md-1"></div>
+        <div class="col-md-9">
+            <div class="form-group">
+               <textarea name="{{ fieldTitle }}" id="{{ fieldTitle }}" placeholder="{{fieldTitle}}"></textarea>
+            </div>
+        </div>
+        <div class="col-md-2"><a href="#" class="delete btn btn-small btn-danger">X</a></div>
+    </script>
+    
+    <script type="text/template" id="checkBoxtemplate">
+        <div class="col-md-1"></div>
+
+        <div class="col-md-9">
+            <div class="checkbox">
+                <@ _.each(fieldValues, function(v) { @> <label><input type="checkbox" name="{{v}}" value="{{v}}"> {{ v  }}</label> <@ }); @>
+              </div>
+        </div>
+        <div class="col-md-2"><a href="#" class="delete btn btn-small btn-danger">X</a></div>
+    </script> 
+    
+    <script type="text/template" id="radioButtontemplate">
+        <div class="col-md-1"></div>
+        <div class="col-md-9">
+            <div class="radio">
+              <@ _.each(fieldValues, function(v) { @> <label><input type="radio" name="{{fieldTitle}}" value="{{v}}"> {{ v  }}</label> <@ }); @>
+            </div>
+        </div>
+        <div class="col-md-2"><a href="#" class="delete btn btn-small btn-danger">X</a></div>
+    </script> 
+    
+    <script type="text/template" id="listBoxtemplate">
+        <div class="col-md-1"></div>
+
+        <div class="col-md-9">
+            <div class="form-group">
+               <select class="form-control" name="{{ fieldTitle }}">
+               
+               <@ _.each(fieldValues, function(v) { @> <option name="{{v}}" value="{{v}}"> {{ v }}</option> <@ }); @>
+               
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2"><a href="#" class="delete btn btn-small btn-danger">X</a></div>
     </script>
     
     

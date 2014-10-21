@@ -12,14 +12,20 @@ app.Views.FormIndexView = Backbone.View.extend({
 });
 
 
+//_.templateSettings = {
+//    interpolate: /\{\{(.+?)\}\}/g
+//};
+
 _.templateSettings = {
-    interpolate: /\{\{(.+?)\}\}/g
+      interpolate: /\{\{(.+?)\}\}/g,
+      evaluate: /\<\@(.+?)\@\>/gim
 };
+
 
 app.Views.FormElementAddView = Backbone.View.extend({
 
     tagName: 'div',
-    className: 'form-element',
+    className: 'row form-element',
 
     templates: {
        inputBoxtemplate : _.template($("#inputBoxtemplate").html()),
@@ -29,17 +35,16 @@ app.Views.FormElementAddView = Backbone.View.extend({
        listBoxtemplate : _.template($("#listBoxtemplate").html())
     },
 
+
     initialize: function () {
-        console.log('view initialized', this.model);
-        
-        console.log(this.render().el);
+        console.log('Form Add Single Element initialized');
     },
 
     render: function () {
-        
         var formElement = this.model;
-        
         var templateName = this.checkForType(formElement);
+        
+        console.log(this.model.toJSON());
         
         this.$el.html(this.templates[templateName](this.model.toJSON()));
         return this;
@@ -61,8 +66,6 @@ app.Views.FormElementAddView = Backbone.View.extend({
         }
     }
     
-    
-    
 });
 
 
@@ -70,10 +73,17 @@ app.Views.FormElementCollectionView = Backbone.View.extend({
     tagName: 'div',
     className: 'form-container',
     initialize: function () {
-        console.log('Collection initialized');
+        console.log('Form View Collection initialized');
+        //this.render();
     },
     render: function () {
-
+        this.collection.each(this.addOne, this);
+        console.log(this.el);
+        return this;
+    },
+    addOne : function(formElement){
+        var formElementView = new app.Views.FormElementAddView({model: formElement});
+        this.$el.append(formElementView.render().el);
     }
 
 });
