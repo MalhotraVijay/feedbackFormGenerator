@@ -25,8 +25,11 @@
   ],
   "devDependencies": {
     "bootstrap": "~3.2.0",
-    "jquery" : "~2.1.1"
-    "backbone" : "~1.1.2",
-    "mustache.js" : "~0.8.2"
+    "jquery": "~2.1.1",
+    "backbone": "~1.1.2",
+    "mustache.js": "~0.8.2"
+  },
+  "dependencies": {
+    "flatstrap3": "~3.0.3"
   }
 }

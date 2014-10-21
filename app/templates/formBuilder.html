@@ -9,71 +9,104 @@
     <script src="../../bower_components/jquery/dist/jquery.min.js"></script> 
     <link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-   
+
+     
     <script src="../../bower_components/underscore/underscore.js"></script>
     <script src="../../bower_components/backbone/backbone.js"></script>
     
     <style type="text/css">
+        body{
+            font-family: open-sans;
+        }
         #feedbackForm{
             padding:10px;
+            text-align: left;
         }
+        .btn,.form-control,.modal-content,.panel-heading{
+            border-radius: 0px;
+        }
+        @media (min-width: 768px){
+            .modal-dialog{
+                width : 500px;
+            }
+        }
+        .modal-body{
+            background: #E6E7EB;
+        }
+        .modal-content{
+            text-align: center;
+        }
+        .panel-heading:hover{
+            background-color : #428bca;
+            color: #fff;
+            cursor: pointer;
+        }
+        .panel-default > .active-panel{
+            background-color : #f0ad4e;
+            color: #fff;
+        }
+        
+        .form-layer{
+            background: #f4f4f4;
+            padding: 10px;
+        }
+        
     </style>
     
     <script type="text/javascript">
         
+        window.id = 0;
+        
         $(document).ready(function () {
             
-            var formElementCollection = new app.Collections.FormElementCollection;
             
-            var id= 0;
-            
-            $("#addFieldButton").click(function(){
-                
-                //check for the values 
-                var fieldValues = [];
-                if($("#fieldValues").val() != undefined && $("#fieldValues").val() != ""  ){
-                    fieldValues = $("#fieldValues").val().split(',');
-                }
-                
-                var formItems = {
-                    id:id++,
-                    fieldTitle : $("#fieldTitle").val(),
-                    fieldHelp : $("#fieldHelp").val(),
-                    fieldType : $("#fieldType").val(),
-                    fieldValues : fieldValues
-                }
-                
-                //create a formelement model and update the fields
-                var formElement = new app.Models.FormElementModel();
-                
-                for(element in formItems){
-                    formElement.set(element,formItems[element]);
-                }
-                //console.log(formElement);
-                                
-                //create a form view ( not needed , this is called in the collection addOne)
-//                var formElementView = new app.Views.FormElementAddView({model: formElement});
-//                console.log(formElementView);
-                
-                
-                //add to the new model everytime to the collection
-                formElementCollection.add(formElement);
-                console.log(formElementCollection);
-                
-                //call the view for the collection
-                var formElementCollectionView = new app.Views.FormElementCollectionView({ collection : formElementCollection });
-                var formHTML = formElementCollectionView.render().el;
-                
-                
-                //add the form to the html
-                $('#feedbackForm').html(formHTML);
-                
-                //add the form text to the html
-                var formHtmlCode = $('#feebackFormHtmlContainer').html();
-                formHtmlCode = formHtmlCode.replace(/<a href="#" class="delete btn btn-small btn-danger">X<\/a>/g,'')
-                $('#htmlTemplate').text(formHtmlCode);
-                
-            });
+//            $("#addFieldButtonvv").click(function(){
+//                
+//                //check for the values 
+//                var fieldValues = [];
+//                if($("#fieldValues").val() != undefined && $("#fieldValues").val() != ""  ){
+//                    fieldValues = $("#fieldValues").val().split(',');
+//                }
+//                
+//                var formItems = {
+//                    id:id++,
+//                    fieldTitle : $("#fieldTitle").val(),
+//                    fieldHelp : $("#fieldHelp").val(),
+//                    fieldType : $("#fieldType").val(),
+//                    fieldValues : fieldValues
+//                }
+//                
+//                //create a formelement model and update the fields
+//                var formElement = new app.Models.FormElementModel();
+//                
+//                for(element in formItems){
+//                    formElement.set(element,formItems[element]);
+//                }
+//                //console.log(formElement);
+//                                
+//                //create a form view ( not needed , this is called in the collection addOne)
+////                var formElementView = new app.Views.FormElementAddView({model: formElement});
+////                console.log(formElementView);
+//                
+//                
+//                //add to the new model everytime to the collection
+//                formElementCollection.add(formElement);
+//                console.log(formElementCollection);
+//                
+//                //call the view for the collection
+//                var formElementCollectionView = new app.Views.FormElementCollectionView({ collection : formElementCollection });
+//                var formHTML = formElementCollectionView.render().el;
+//                
+//                
+//                //add the form to the html
+//                $('#feedbackForm').html(formHTML);
+//                
+//                //add the form text to the html
+//                var formHtmlCode = $('#feebackFormHtmlContainer').html();
+//                formHtmlCode = formHtmlCode.replace(/<a href="#" class="delete btn btn-small btn-danger">X<\/a>/g,'')
+//                $('#htmlTemplate').text(formHtmlCode);
+//                
+//            });
             
             
             $('select#fieldType').change(function(){
@@ -88,10 +121,19 @@
             });
             
             $('#promoButton').click(function(){
-                $(".modal-body").html($('#htmlTemplate').text());
+                $("#form-elements").html($('#htmlTemplate').text());
                $("#myModal").modal({});
             });
             
+            
+            $(".panel-heading").click(function(){
+                
+                $('.panel-heading').each(function(){
+                   $(this).removeClass('active-panel'); 
+                });
+                $(this).addClass('active-panel');
+            
+            })
             
             
             
@@ -117,18 +159,20 @@
                 <div class="col-md-4"></div>
                 <div class="col-md-4">
                     <a href="#feedback/add">
-                        <button class="btn btn-primary">Form builder</button>
+<!--                        <button class="btn btn-primary">Form builder</button>-->
                     </a>
 
-                    <button class="btn btn-primary" id="promoButton">View Live Promo</button>
+                    
                 </div>
-                <div class="col-md-4"></div>
+                <div class="col-md-4"><button class="btn btn-primary pull-right" id="promoButton">View Live Promo</button></div>
             </div>
             
             <div class="row"><br></div>
             
+        <!--  All the changes happen in this div-->
             <div class="row" id="primaryTemplate"></div>
 
+        <!--Append the final code here -->
             <div class="row" id="output" style="margin-top:3%;">
                 
                 <div class="col-md-3"></div>
@@ -146,23 +190,41 @@
         </div>
 <!--        Live promo modal show -->
        
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Feedback</h4>
+                    <p></p>
+                    <p>Please tell us what do you think, any kind of feedback is highly appreciated !</p>
+                  </div>
+                  <div class="modal-body">
+                       <div class="panel-default">
+                            <div class="panel-heading"> Price Too High.</div>
+                            <div class="panel-heading"> Didn't find what i was looking for.</div>
+                            <div class="panel-heading"> I am lost!</div>
+                            <div class="panel-heading"> Didn't find the right payment option.</div>
+                            <div class="panel-heading"> I don't want to buy right now.</div>
+                            <div class="panel-heading"> I need more Product Information.</div>
+                            <div class="panel-heading"> Other. </div>
+                        </div>
+<!--
+                        <div id="form-elements">
+                            
+                        </div>
+-->
+                  </div>
+                  <div class="modal-footer">
+                  <div id="form-elements">
+                            
+                        </div>
+<!--                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                    <button type="button" class="btn btn-primary">Submit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
         
         
         
@@ -171,9 +233,10 @@
     <!-- keeping the backbone templates static now -->
 
     <script type="text/template" id="formBuilderTemplate">
-        <div class="col-md-1"></div>
+        <div class="col-md-2"></div>
 
         <div class="col-md-4">
+            <div align="center"> <h3>Form Builder</h3> </div>
             <div class="form-layer">
                 <form role="form" method="get" id="formGeneratorWidget" action="">
 
@@ -202,8 +265,8 @@
 
             </div>
         </div>
-        <div class="col-md-2"> </div>
-        <div class="col-md-4" id="feebackFormHtmlContainer">
+        <div class="col-md-1"> </div>
+        <div class="col-md-5" id="feebackFormHtmlContainer">
             <form role="form" method="post" id="feedbackForm" name="feedbackForm">
 
             </form>
@@ -211,9 +274,9 @@
     </script>
     
     <script type="text/template" id="liveViewTemplate">
-        <div class="col-md-1"></div>
+        <div class="col-md-2"></div>
 
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div class="form-group">
                 This should ideally be the live promo !
             </div>
@@ -222,9 +285,9 @@
     </script>
      
     <script type="text/template" id="inputBoxtemplate">
-        <div class="col-md-1"></div>
+        <div class="col-md-2"></div>
 
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div class="form-group">
                <input type="text" name="{{ fieldTitle  }}" id=" {{ fieldHelp }}" placeholder="{{ fieldHelp }}" class="form-control" >
             </div>
@@ -233,19 +296,19 @@
     </script>
     
     <script type="text/template" id="textAreatemplate">
-        <div class="col-md-1"></div>
-        <div class="col-md-9">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
             <div class="form-group">
-               <textarea name="{{ fieldTitle }}" id="{{ fieldTitle }}" placeholder="{{fieldTitle}}"></textarea>
+               <textarea cols="34" rows="5" name="{{ fieldTitle }}" id="{{ fieldTitle }}" placeholder="{{fieldTitle}}"></textarea>
             </div>
         </div>
         <div class="col-md-2"><a href="#" class="delete btn btn-small btn-danger">X</a></div>
     </script>
     
     <script type="text/template" id="checkBoxtemplate">
-        <div class="col-md-1"></div>
+        <div class="col-md-2"></div>
 
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div class="checkbox">
                 <@ _.each(fieldValues, function(v) { @> <label><input type="checkbox" name="{{v}}" value="{{v}}"> {{ v  }}</label> <@ }); @>
               </div>
@@ -254,8 +317,8 @@
     </script> 
     
     <script type="text/template" id="radioButtontemplate">
-        <div class="col-md-1"></div>
-        <div class="col-md-9">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
             <div class="radio">
               <@ _.each(fieldValues, function(v) { @> <label><input type="radio" name="{{fieldTitle}}" value="{{v}}"> {{ v  }}</label> <@ }); @>
             </div>
@@ -264,9 +327,9 @@
     </script> 
     
     <script type="text/template" id="listBoxtemplate">
-        <div class="col-md-1"></div>
+        <div class="col-md-2"></div>
 
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div class="form-group">
                <select class="form-control" name="{{ fieldTitle }}">
                
@@ -288,7 +351,11 @@
     
 
     <script type="text/javascript">
-        var router = new app.mainRoutes();
+        
+        window.formElementCollection = new app.Collections.FormElementCollection;
+        var router = new app.mainRoutes({
+            formElementCollection : window.formElementCollection
+        });
 
          //initiate Backbone to listen to the urls
         Backbone.history.start();

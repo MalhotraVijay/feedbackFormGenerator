@@ -1,6 +1,10 @@
 app.Views.FormIndexView = Backbone.View.extend({
 
     className: 'row',
+    
+    events :{
+       "click #addFieldButton" : "addElement"  
+    },
 
     initialize: function () {},
 
@@ -8,6 +12,47 @@ app.Views.FormIndexView = Backbone.View.extend({
         this.$el.html($("#formBuilderTemplate").html());
         return this;
     },
+    
+    addElement: function(){
+        console.log("evnet binded");
+        
+        //check for the field values 
+        var fieldValues = [];
+        if($("#fieldValues").val() != undefined && $("#fieldValues").val() != ""  ){
+            fieldValues = $("#fieldValues").val().split(',');
+        }
+
+        var formItems = {
+            id:id++,
+            fieldTitle : $("#fieldTitle").val(),
+            fieldHelp : $("#fieldHelp").val(),
+            fieldType : $("#fieldType").val(),
+            fieldValues : fieldValues
+        }
+
+        //create a formelement model and update the fields
+        var formElement = new app.Models.FormElementModel();
+        for(element in formItems){
+            formElement.set(element,formItems[element]);
+        }
+        
+        //add to the new model everytime to the collection
+        formElementCollection.add(formElement);
+        console.log(formElementCollection);
+
+        //call the view for the collection
+        var formElementCollectionView = new app.Views.FormElementCollectionView({ collection : formElementCollection });
+        
+        var formHTML = formElementCollectionView.render().el;
+        //add the form to the html
+        $('#feedbackForm').html(formHTML);
+
+        //add the form text to the html
+        var formHtmlCode = $('#feebackFormHtmlContainer').html();
+        formHtmlCode = formHtmlCode.replace(/<a href="#" class="delete btn btn-small btn-danger">X<\/a>/g,'')
+        $('#htmlTemplate').text(formHtmlCode);
+        
+    }
 
 });
 
@@ -34,10 +79,16 @@ app.Views.FormElementAddView = Backbone.View.extend({
        radioButtontemplate : _.template($("#radioButtontemplate").html()),
        listBoxtemplate : _.template($("#listBoxtemplate").html())
     },
+    
+    events:{
+        "click a.delete": "destroy",
+       
+    },
 
 
-    initialize: function () {
-        console.log('Form Add Single Element initialized');
+    initialize: function (options) {
+        this.formElementCollection = options.formElementCollection;
+        console.log('Form Add Single Element initialized', this);
     },
 
     render: function () {
@@ -64,6 +115,12 @@ app.Views.FormElementAddView = Backbone.View.extend({
         }else if(fieldType == 'listBox'){
             return 'listBoxtemplate';
         }
+    },
+    
+    destroy: function(){
+        console.log("clicked", this);
+        this.formElementCollection.remove(this.model);
+        this.$el.remove();
     }
     
 });
@@ -72,8 +129,8 @@ app.Views.FormElementAddView = Backbone.View.extend({
 app.Views.FormElementCollectionView = Backbone.View.extend({
     tagName: 'div',
     className: 'form-container',
-    initialize: function () {
-        console.log('Form View Collection initialized');
+    initialize: function (options) {
+        console.log('Form View Collection initialized' , this);
         //this.render();
     },
     render: function () {
@@ -82,7 +139,7 @@ app.Views.FormElementCollectionView = Backbone.View.extend({
         return this;
     },
     addOne : function(formElement){
-        var formElementView = new app.Views.FormElementAddView({model: formElement});
+        var formElementView = new app.Views.FormElementAddView({model: formElement, formElementCollection : this.collection});
         this.$el.append(formElementView.render().el);
     }
 
