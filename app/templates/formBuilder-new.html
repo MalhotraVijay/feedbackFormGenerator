@@ -27,7 +27,7 @@
         #feedbackForm{
             text-align: left;
         }
-        .btn,.form-control,.modal-content,.panel-heading{
+        .btn,.form-control,.modal-content,.panel-heading,.navbar{
             border-radius: 0px;
         }
         @media (min-width: 768px){
@@ -134,22 +134,53 @@
             <div class="row">
                 <br>
             </div>
+            
             <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
-                    <a href="#feedback/add">
-<!--                        <button class="btn btn-primary">Form builder</button>-->
-                    </a>
+                
+                <div class="col-md-2"></div>
+                <div class="col-md-10">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="myModalLabel" contenteditable="true" >Feedback</h4>
+                            <p contenteditable="true">Please tell us what do you think, any kind of feedback is highly appreciated !</p>
+                          </div>
+                          <div class="modal-body">
+                               <div class="panel-default">
+                                    <div class="panel-heading"> Price Too High</div>
+                                    <div class="panel-heading"> Didn't find what i was looking for</div>
+                                    <div class="panel-heading"> I am lost!</div>
+                                    <div class="panel-heading"> Didn't find the right payment option</div>
+                                    <div class="panel-heading"> 
+                                        <span class="glyphicon glyphicon-shopping-cart"> </span>
+                                        <span style="padding-left:5px">I don't want to buy right now</span> 
+                                    </div>
+                                    <div class="panel-heading"> I need more Product Information</div>
+                                    <div class="panel-heading"> Other </div>
+                                </div>
+        <!--
+                                <div id="form-elements">
 
-                    
+                                </div>
+        -->
+                          </div>
+                          <div class="modal-footer">
+                          <div id="form-elements">
+
+                                </div>
+        <!--                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                            <button type="button" class="btn btn-primary">Submit</button>
+                          </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-4"><button class="btn btn-primary pull-right" id="promoButton">View Live Promo</button></div>
+                
             </div>
             
-            <div class="row"><br></div>
             
         <!--  All the changes happen in this div-->
-            <div class="row" id="primaryTemplate"></div>
+        <div class="row" id="primaryTemplate"></div>
 
         <!--Append the final code here -->
             <div class="row" id="output" style="margin-top:3%;">
@@ -167,6 +198,8 @@
                 
             
         </div>
+        
+        
 <!--        Live promo modal show -->
        
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -217,7 +250,6 @@
         <div class="col-md-2"></div>
 
         <div class="col-md-4">
-            <div align="center"> <h3>Form Builder</h3> </div>
             <div class="form-layer">
                 <form role="form" method="get" id="formGeneratorWidget" action="">
 

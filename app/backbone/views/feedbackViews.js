@@ -40,6 +40,9 @@ app.Views.FormIndexView = Backbone.View.extend({
         formElementCollection.add(formElement);
         console.log(formElementCollection);
 
+        
+        
+        
         //call the view for the collection
         var formElementCollectionView = new app.Views.FormElementCollectionView({ collection : formElementCollection });
         
@@ -49,7 +52,7 @@ app.Views.FormIndexView = Backbone.View.extend({
 
         //add the form text to the html
         var formHtmlCode = $('#feebackFormHtmlContainer').html();
-        formHtmlCode = formHtmlCode.replace(/<a href="#" class="delete btn btn-small btn-danger">X<\/a>/g,'')
+        formHtmlCode = formHtmlCode.replace(/<a href="#" class="delete btn btn-small btn-danger pull-right">X<\/a>/g,'')
         $('#htmlTemplate').text(formHtmlCode);
         
     }
