@@ -3,26 +3,110 @@ app.Views.FormIndexView = Backbone.View.extend({
     className: 'row',
     
     events :{
-       "click #addFieldButton" : "addElement"  
+       "click a.add-new-element" : "addNewElement"  
+    },
+    
+    templates : {
+        formEditViewTemplate : $("#formEditViewTemplate").html()
     },
 
-    initialize: function () {},
+    initialize: function () {
+    },
 
     render: function () {
-        this.$el.html($("#formBuilderTemplate").html());
+        //This should be rendered on the add button call
+//        this.$el.html($("#formBuilderTemplate").html());
+        
+        //call the template formViewEditState
+        this.$el.html(this.templates.formEditViewTemplate);
         return this;
     },
     
-    addElement: function(){
-        console.log("evnet binded");
+    addDefault : function(){
+        //call the addNewElement to call the init for adding new product.
+        var formAddNewView = new app.Views.FormAddNewView;
+        
+        $("#primaryTemplate").html(formAddNewView.render().el);
+        formAddNewView.addDefault();
+        
+    },
+    
+    addNewElement : function(){
+        var formAddNewView = new app.Views.FormAddNewView;
+        $("#primaryTemplate").html(formAddNewView.render().el);
+        
+        $('select#fieldType').change(function(){
+            if($(this).val()=="checkBox"||
+                $(this).val() == "radioButton" ||
+                $(this).val() == "listBox"){
+                var inputElement = '<input type="text" class="form-control" id="fieldValues" placeholder="Comma seperated field values" name="fieldValues">'
+                $("#fieldValuesDiv").html(inputElement);
+            }else{
+                $("#fieldValuesDiv").html("")
+            }
+        });
+        
+        return false;
+    }
+
+});
+
+
+app.Views.FormAddNewView = Backbone.View.extend({
+
+    className: '',
+    
+    events :{
+       "click #addFieldButton" : "addElement",
+    },
+    
+    templates : {
+        formAddNewTemplate : $("#formAddNewTemplate").html()
+    },
+
+    initialize: function () {
+    },
+    
+    addDefault : function(){
+        
+        //adding 2 objects by default
+        console.log("In the form view edit function");
+        this.addElement({ formItems : {
+                                id:id++,
+                                fieldTitle : 'Email',
+                                fieldHelp : '* Enter your Email ID',
+                                fieldType : 'inputBox',
+                                fieldValues : []
+                            }
+                        });
+        
+        this.addElement({ formItems : {
+                                id:id++,
+                                fieldTitle : 'Message',
+                                fieldHelp : '* Message ',
+                                fieldType : 'textArea',
+                                fieldValues : []
+                            }
+                        });
+    },
+
+    render: function () {
+        this.$el.html(this.templates.formAddNewTemplate);
+        return this;
+    },
+    
+    addElement: function(options){
+        console.log("event binded");
         
         //check for the field values 
         var fieldValues = [];
         if($("#fieldValues").val() != undefined && $("#fieldValues").val() != ""  ){
             fieldValues = $("#fieldValues").val().split(',');
         }
-
-        var formItems = {
+        
+        
+        
+        var formItems = options.formItems || {
             id:id++,
             fieldTitle : $("#fieldTitle").val(),
             fieldHelp : $("#fieldHelp").val(),
@@ -40,9 +124,6 @@ app.Views.FormIndexView = Backbone.View.extend({
         formElementCollection.add(formElement);
         console.log(formElementCollection);
 
-        
-        
-        
         //call the view for the collection
         var formElementCollectionView = new app.Views.FormElementCollectionView({ collection : formElementCollection });
         
@@ -51,7 +132,7 @@ app.Views.FormIndexView = Backbone.View.extend({
         $('#feedbackForm').html(formHTML);
 
         //add the form text to the html
-        var formHtmlCode = $('#feebackFormHtmlContainer').html();
+        var formHtmlCode = $('#feebackFormHtmlContainer').html() || "";
         formHtmlCode = formHtmlCode.replace(/<a href="#" class="delete btn btn-small btn-danger pull-right">X<\/a>/g,'')
         $('#htmlTemplate').text(formHtmlCode);
         
@@ -60,9 +141,6 @@ app.Views.FormIndexView = Backbone.View.extend({
 });
 
 
-//_.templateSettings = {
-//    interpolate: /\{\{(.+?)\}\}/g
-//};
 
 _.templateSettings = {
       interpolate: /\{\{(.+?)\}\}/g,

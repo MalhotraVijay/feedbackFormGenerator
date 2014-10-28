@@ -27,7 +27,7 @@
         #feedbackForm{
             text-align: left;
         }
-        .btn,.form-control,.modal-content,.panel-heading,.navbar{
+        .btn,.form-control,.modal-content,.panel-heading,.navbar,.btn-group-vertical>.btn:first-child:not(:last-child),.btn-group-vertical>.btn:last-child:not(:first-child){
             border-radius: 0px;
         }
         @media (min-width: 768px){
@@ -54,13 +54,13 @@
             font-size: 12px;
         }
         .panel-heading:hover{
-            background-color : #428bca;
-            color: #fff;
+            background-color : #aaaaaa;
+            color: #fff; 
             cursor: pointer;
         }
         .panel-default > .active-panel{
-            background-color : #f0ad4e;
-            color: #fff;
+            background-color : #ccc;
+            color: #000; 
         }
         
         .form-layer{
@@ -81,6 +81,10 @@
             padding:1px 5px;
             font-size: 10px;
         }
+        .edit-remove-element{
+            float: right;
+            display: none;
+        }
         
         
     </style>
@@ -91,33 +95,75 @@
         
         $(document).ready(function () {
             
-            $('select#fieldType').change(function(){
-                if($(this).val()=="checkBox"||
-                    $(this).val() == "radioButton" ||
-                    $(this).val() == "listBox"){
-                    var inputElement = '<input type="text" class="form-control" id="fieldValues" placeholder="Comma seperated field values" name="fieldValues">'
-                    $("#fieldValuesDiv").html(inputElement);
-                }else{
-                    $("#fieldValuesDiv").html("")
-                }
-            });
+            vmlib.showLivePromo();
             
-            $('#promoButton').click(function(){
-                $("#form-elements").html($('#htmlTemplate').text());
-               $("#myModal").modal({});
-            });
-            
-            
-            $(".panel-heading").click(function(){
+            $('.add-panel-element').click(function(){
                 
-                $('.panel-heading').each(function(){
-                   $(this).removeClass('active-panel'); 
-                });
-                $(this).addClass('active-panel');
+                console.log("Added the element");
+                
+                var panelElement = '<div class="panel-heading"> <span class="glyphicon glyphicon-shopping-cart"> </span><span style="padding-left:5px" class="panelText" contenteditable="true" >Yout text here</span></div>'
+                $('#panel-elements').append(panelElement);
+                
+            });
             
+            $('#liveViewPromoBtn').click(vmlib.showLivePromo);
+            
+            $(".panel-heading").on('click',function(){
+                
+//                console.log($(this));
+//                
+//                $('.panel-heading').each(function(){
+//                   $(this).removeClass('active-panel'); 
+//                });
+//                $(this).addClass('active-panel');
+//            
+            });
+            
+            $('.panel-heading').hover(function(){
+                
+               $('.edit-remove-element').css('display','block');
+                $(this).append($('.edit-remove-element'));
+                $('.edit-remove-element').css({color : '#000',display:'block'});
+                
+            });
+            
+            $('.panel-default').mouseleave(function(){
+               $('.edit-remove-element').css('display','none'); 
             });
             
         });
+        
+        
+        var vmlib = {
+            showLivePromo : function(){
+                console.log('called');
+                //processFormElements();
+                $("#processContainer").html($("#formHTMLEditContainer").html());
+                
+                //remove content editable properties
+                $(".formHeading")[1].removeAttribute('contenteditable');
+                $(".formDescription")[1].removeAttribute('contenteditable');
+                
+                
+                var panelText = $('.panel-text');
+                var start = panelText.length/2;
+                for(i=start; i < panelText.length ; i++){
+                    panelText[i].removeAttribute('contenteditable');
+                }
+                
+                var removable = $('.removable');
+                var start = removable.length/2;
+                for(i=start; i < removable.length ; i++){
+                    removable[i].remove();
+                }
+                
+                
+                
+               $("#myModal").html($("#processContainer").html());
+               $("#myModal").modal({});
+                
+            }
+        }
 
     </script>
 
@@ -132,55 +178,33 @@
         </div>
         <div class="container-fluid" id="DashBoardDiv">
             <div class="row">
+                <div class="pull-right">
+               <button class="btn btn-primary" id="liveViewPromoBtn"> View Live Promo</button>
+                </div>
                 <br>
             </div>
             
             <div class="row">
                 
                 <div class="col-md-2"></div>
-                <div class="col-md-10">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                            <h4 class="modal-title" id="myModalLabel" contenteditable="true" >Feedback</h4>
-                            <p contenteditable="true">Please tell us what do you think, any kind of feedback is highly appreciated !</p>
-                          </div>
-                          <div class="modal-body">
-                               <div class="panel-default">
-                                    <div class="panel-heading"> Price Too High</div>
-                                    <div class="panel-heading"> Didn't find what i was looking for</div>
-                                    <div class="panel-heading"> I am lost!</div>
-                                    <div class="panel-heading"> Didn't find the right payment option</div>
-                                    <div class="panel-heading"> 
-                                        <span class="glyphicon glyphicon-shopping-cart"> </span>
-                                        <span style="padding-left:5px">I don't want to buy right now</span> 
-                                    </div>
-                                    <div class="panel-heading"> I need more Product Information</div>
-                                    <div class="panel-heading"> Other </div>
-                                </div>
-        <!--
-                                <div id="form-elements">
-
-                                </div>
-        -->
-                          </div>
-                          <div class="modal-footer">
-                          <div id="form-elements">
-
-                                </div>
-        <!--                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                            <button type="button" class="btn btn-primary">Submit</button>
-                          </div>
-                        </div>
-                    </div>
+                
+                <!-- Contains the Preview Form layer -->
+                <div class="col-md-10" id="formHTMLEditContainer">
+                    
                 </div>
                 
             </div>
             
-            
-        <!--  All the changes happen in this div-->
-        <div class="row" id="primaryTemplate"></div>
+            <div class="" style="z-index:20000; position:fixed; top : 100px;">
+                
+                <div class="btn-group-vertical">
+                   <button class="btn btn-primary">Continue with default form</button>
+                   <br>
+                   <button class="btn btn-success">Edit this form</button>
+                   <br>
+                   <button class="btn btn-default">Done</button>
+                </div>
+            </div>
 
         <!--Append the final code here -->
             <div class="row" id="output" style="margin-top:3%;">
@@ -193,6 +217,8 @@
                 
             </div>
             
+            
+            
             <div class="row"><br><br></div>
             
                 
@@ -203,53 +229,75 @@
 <!--        Live promo modal show -->
        
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel" contenteditable="true" >Feedback</h4>
-                    <p contenteditable="true">Please tell us what do you think, any kind of feedback is highly appreciated !</p>
-                  </div>
-                  <div class="modal-body">
-                       <div class="panel-default">
-                            <div class="panel-heading"> Price Too High</div>
-                            <div class="panel-heading"> Didn't find what i was looking for</div>
-                            <div class="panel-heading"> I am lost!</div>
-                            <div class="panel-heading"> Didn't find the right payment option</div>
-                            <div class="panel-heading"> 
-                                <span class="glyphicon glyphicon-shopping-cart"> </span>
-                                <span style="padding-left:5px">I don't want to buy right now</span> 
-                            </div>
-                            <div class="panel-heading"> I need more Product Information</div>
-                            <div class="panel-heading"> Other </div>
-                        </div>
-<!--
-                        <div id="form-elements">
-                            
-                        </div>
--->
-                  </div>
-                  <div class="modal-footer">
-                  <div id="form-elements">
-                            
-                        </div>
-<!--                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                    <button type="button" class="btn btn-primary">Submit</button>
-                  </div>
-                </div>
-              </div>
+
             </div>
         
-        
+        <div id="processContainer" style="display:none;">
+            
+        </div>
         
     </div>
 
     <!-- keeping the backbone templates static now -->
+    
+    <script type="text/template" id="formEditViewTemplate">
+        <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="formHeading" contenteditable="true" >Feedback</h4>
+                            <p contenteditable="true" class="formDescription">Please tell us what do you think, any kind of feedback is highly appreciated !</p>
+                          </div>
+                          <div class="modal-body">
+                               <div class="panel-default" id="panel-elements">
+                                    <div class="panel-heading"> 
+                                        <span class="glyphicon glyphicon-shopping-cart"> </span>
+                                        <span class="panel-text" style="padding-left:5px" contenteditable="true" >Like</span> 
+                                    </div>
+                                    <div class="panel-heading"> 
+                                        <span class="glyphicon glyphicon-shopping-cart"> </span>
+                                        <span class="panel-text" style="padding-left:5px" contenteditable="true" >Question</span> 
+                                    </div>
+                                    <div class="panel-heading"> 
+                                        <span class="glyphicon glyphicon-shopping-cart"> </span>
+                                        <span class="panel-text" style="padding-left:5px" contenteditable="true" >Suggestion</span> 
+                                    </div>
+                                    <div class="panel-heading"> 
+                                        <span class="glyphicon glyphicon-shopping-cart"> </span>
+                                        <span class="panel-text" style="padding-left:5px" contenteditable="true" >Problem</span> 
+                                    </div>
+                                </div>
+                                <div class="removable" align="center" style="padding-top:10px">
+                                    <a href="#" class="add-panel-element"> <span class="glyphicon glyphicon-plus">Add</span> </a>
+                                </div>
+                                 <div class="removable edit-remove-element" remove-element="">
+                                     <!-- <span class="glyphicon glyphicon-pencil"></span> -->
+                                     <a href="#" style="color:#A82400; text-decoration:none"><span class="glyphicon glyphicon-remove"></span></a>
+                                 </div>
+                          </div>
+                          <div class="modal-footer">
+                            <div align="center" class="removable">
+                                    <a href="#" class="add-new-element"> <span class="glyphicon glyphicon-plus">Add</span> </a>
+                            </div>
+                            <div id="form-elements"></div>
+                            
+                            <!--  The formBuilder is loaded in this div-->
+                            <div class="" id="primaryTemplate"></div>
+                            
+                            <button type="button" class="btn btn-primary">Submit</button>
+                          </div>
+                        </div>
+                    </div>
+    </script>
+    
+   
+    <script type="text/template" id="formAddNewTemplate">
+        <div class="col-md-12" id="feebackFormHtmlContainer">
+            <form role="form" method="post" id="feedbackForm" name="feedbackForm">
 
-    <script type="text/template" id="formBuilderTemplate">
-        <div class="col-md-2"></div>
-
-        <div class="col-md-4">
+            </form>
+        </div>       
+        <div class="col-md-12 removable">
             <div class="form-layer">
                 <form role="form" method="get" id="formGeneratorWidget" action="">
 
@@ -259,7 +307,7 @@
                     <div class="form-group">
                         <input type="text" class="form-control" id="fieldHelp" placeholder="Field Help" name="fieldHelp">
                     </div>
-                        <div class="selectCategroy">
+                        <div class="form-group">
                             <select name="fieldType" id="fieldType" class="form-control">
                                 <option value="inputBox">Inputbox</option>
                                 <option value="textArea">TextArea</option>
@@ -268,7 +316,6 @@
                                 <option value="listBox">ListBox</option>
                             </select>
                         </div>
-                        <div><br></div>
                         <div class="form-group" id="fieldValuesDiv"></div>
 
                     <div align="center">
@@ -277,12 +324,6 @@
                 </form>
 
             </div>
-        </div>
-        <div class="col-md-1"> </div>
-        <div class="col-md-5" id="feebackFormHtmlContainer">
-            <form role="form" method="post" id="feedbackForm" name="feedbackForm">
-
-            </form>
         </div>
     </script>
     
@@ -299,7 +340,7 @@
      
     <script type="text/template" id="inputBoxtemplate">
         <div class="col-md-10" style="padding-bottom:3px;"><span style=" padding:2px; font-size:12px;" >{{ fieldHelp }}</span></div>
-        <div class="col-md-2"><a href="#" class="delete btn btn-small btn-danger pull-right">X</a></div>
+        <div class="col-md-2 removable"><a href="#" class="delete btn btn-small btn-danger pull-right">X</a></div>
         
         <div class="col-md-12">
             <div class="form-group">
@@ -309,39 +350,40 @@
     </script>
     
     <script type="text/template" id="textAreatemplate">
-        <div class="col-md-12" style="padding-bottom:3px;"><span style=" padding:2px; font-size:12px;" >{{ fieldHelp }}</span></div>
+        <div class="col-md-10" style="padding-bottom:3px;"><span style=" padding:2px; font-size:12px;" >{{ fieldHelp }}</span></div>
+        <div class="col-md-2 removable"><a href="#" class="delete btn btn-small btn-danger pull-right">X</a></div>
         <div class="col-md-12">
             <div class="form-group">
                <textarea name="{{ fieldTitle }}" id="{{ fieldTitle }}" placeholder="{{fieldTitle}}"></textarea>
-               <a href="#" class="delete btn btn-small btn-danger">X</a>
             </div>
         </div>
-        <div class=""></div>
     </script>
     
     <script type="text/template" id="checkBoxtemplate">
-        <div class="col-md-2"></div>
+        <div class="col-md-10" style="padding-bottom:3px;"><span style=" padding:2px; font-size:12px;" >{{ fieldHelp }}</span></div>
+        <div class="col-md-2 removable"><a href="#" class="delete btn btn-small btn-danger pull-right">X</a></div>
 
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="checkbox">
                 <@ _.each(fieldValues, function(v) { @> <label><input type="checkbox" name="{{v}}" value="{{v}}"> {{ v  }}</label> <@ }); @>
               </div>
         </div>
-        <div class="col-md-2"><a href="#" class="delete btn btn-small btn-danger">X</a></div>
     </script> 
     
     <script type="text/template" id="radioButtontemplate">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
+        <div class="col-md-10" style="padding-bottom:3px;"><span style=" padding:2px; font-size:12px;" >{{ fieldHelp }}</span></div>
+        <div class="col-md-2 removable"><a href="#" class="delete btn btn-small btn-danger pull-right">X</a></div>
+
+        <div class="col-md-12">
             <div class="radio">
               <@ _.each(fieldValues, function(v) { @> <label><input type="radio" name="{{fieldTitle}}" value="{{v}}"> {{ v  }}</label> <@ }); @>
             </div>
         </div>
-        <div class="col-md-2"><a href="#" class="delete btn btn-small btn-danger">X</a></div>
     </script> 
     
     <script type="text/template" id="listBoxtemplate">
-        <div class="col-md-2"></div>
+        <div class="col-md-10" style="padding-bottom:3px;"><span style=" padding:2px; font-size:12px;" >{{ fieldHelp }}</span></div>
+        <div class="col-md-2 removable"><a href="#" class="delete btn btn-small btn-danger pull-right">X</a></div>
 
         <div class="col-md-8">
             <div class="form-group">
@@ -352,7 +394,6 @@
                 </select>
             </div>
         </div>
-        <div class="col-md-2"><a href="#" class="delete btn btn-small btn-danger">X</a></div>
     </script>
     
     
