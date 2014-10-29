@@ -1,6 +1,6 @@
 app.Views.FormIndexView = Backbone.View.extend({
 
-    className: 'row',
+    className: 'view-modal-container',
     
     events :{
        "click a.add-new-element" : "addNewElement" ,
@@ -36,6 +36,8 @@ app.Views.FormIndexView = Backbone.View.extend({
     addNewElement : function(){
         var formAddNewView = new app.Views.FormAddNewView;
         $("#primaryTemplate").html(formAddNewView.render().el);
+        
+        $('.form-layer').css('display','block');
         
         $('select#fieldType').change(function(){
             if($(this).val()=="checkBox"||
@@ -108,17 +110,21 @@ app.Views.FormAddNewView = Backbone.View.extend({
     addElement: function(options){
         console.log("event binded");
         
+        $('.form-layer').css('display','none');
+        
         //check for the field values 
         var fieldValues = [];
         if($("#fieldValues").val() != undefined && $("#fieldValues").val() != ""  ){
             fieldValues = $("#fieldValues").val().split(',');
         }
         
-        
+        var fieldTitle = $("#fieldTitle").val();
+        fieldTitle = fieldTitle.replace(/^\s+|\s+$/gm,'');
+        //fieldTitle = fieldTitle.replace(/\s/gm,'-');
         
         var formItems = options.formItems || {
             id:id++,
-            fieldTitle : $("#fieldTitle").val(),
+            fieldTitle : fieldTitle,
             fieldHelp : $("#fieldHelp").val(),
             fieldType : $("#fieldType").val(),
             fieldValues : fieldValues
@@ -219,7 +225,7 @@ app.Views.FormElementAddView = Backbone.View.extend({
 
 app.Views.FormElementCollectionView = Backbone.View.extend({
     tagName: 'div',
-    className: 'form-container',
+    className: 'row form-container',
     initialize: function (options) {
         console.log('Form View Collection initialized' , this);
         //this.render();
@@ -242,7 +248,7 @@ app.Views.FormElementCollectionView = Backbone.View.extend({
 
 app.Views.FormLiveListView = Backbone.View.extend({
 
-    className: 'row',
+    className: 'form-row',
 
     initialize: function () {},
 
