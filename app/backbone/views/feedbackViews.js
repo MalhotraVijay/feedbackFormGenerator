@@ -3,7 +3,9 @@ app.Views.FormIndexView = Backbone.View.extend({
     className: 'row',
     
     events :{
-       "click a.add-new-element" : "addNewElement"  
+       "click a.add-new-element" : "addNewElement" ,
+       "click a.remove-anchor" : "removePanelElement" ,
+        
     },
     
     templates : {
@@ -47,6 +49,14 @@ app.Views.FormIndexView = Backbone.View.extend({
         });
         
         return false;
+    },
+    
+    removePanelElement : function(ev){
+        
+        console.log('Remove element');
+        //remove the parent element of the clicked cancle button
+        $(ev.currentTarget).parent().parent().remove();
+        
     }
 
 });

@@ -95,13 +95,19 @@
         
         $(document).ready(function () {
             
+            
+            $('#output , #editbtngrp').hide();
             vmlib.showLivePromo();
+            
+            
             
             $('.add-panel-element').click(function(){
                 
                 console.log("Added the element");
                 
-                var panelElement = '<div class="panel-heading"> <span class="glyphicon glyphicon-shopping-cart"> </span><span style="padding-left:5px" class="panelText" contenteditable="true" >Yout text here</span></div>'
+                
+                var panelElement = '<div class="panel-heading"> <span class="glyphicon glyphicon-shopping-cart"> </span><span class="panel-text" style="padding-left:5px" contenteditable="true" >Like</span><div class="removable edit-remove-element" remove-element=""><a href="#"  class="remove-anchor" style="color:#A82400; text-decoration:none"><span class="glyphicon glyphicon-remove"></span></a></div></div>'
+                
                 $('#panel-elements').append(panelElement);
                 
             });
@@ -121,14 +127,28 @@
             
             $('.panel-heading').hover(function(){
                 
-               $('.edit-remove-element').css('display','block');
-                $(this).append($('.edit-remove-element'));
-                $('.edit-remove-element').css({color : '#000',display:'block'});
+                $('.panel-heading').find('.edit-remove-element').css('display','none');
+                $(this).find('.edit-remove-element').css('display','block');
+                //$('.edit-remove-element').css({color : '#000',display:'block'});
                 
             });
             
             $('.panel-default').mouseleave(function(){
                $('.edit-remove-element').css('display','none'); 
+            });
+            
+            $("#continue-form").click(function(){
+                $("#viewModal").modal('hide');
+                $("#processContainer , #viewModal").html('');
+                $("#actionbtngrp").hide();
+            });
+            
+            $(".edit-form").click(function(){
+                $("#processContainer , #viewModal").html('');
+                $("#viewModal").modal('hide');
+                $("#editModal").modal('show');
+                $("#actionbtngrp").hide();
+                $("#editbtngrp").show();
             });
             
         });
@@ -138,29 +158,33 @@
             showLivePromo : function(){
                 console.log('called');
                 //processFormElements();
+                
                 $("#processContainer").html($("#formHTMLEditContainer").html());
-                
+            
                 //remove content editable properties
-                $(".formHeading")[1].removeAttribute('contenteditable');
-                $(".formDescription")[1].removeAttribute('contenteditable');
                 
+                $('#processContainer').find('.formHeading').removeAttr('contenteditable');
+                $('#processContainer').find('.formDescription').removeAttr('contenteditable');
+                //$(".formHeading")[1].removeAttribute('contenteditable');
+                //$(".formDescription")[1].removeAttribute('contenteditable');
                 
-                var panelText = $('.panel-text');
-                var start = panelText.length/2;
-                for(i=start; i < panelText.length ; i++){
+                var panelText = $('#processContainer').find('.panel-text');
+
+                for(i=0; i < panelText.length ; i++){
                     panelText[i].removeAttribute('contenteditable');
                 }
                 
-                var removable = $('.removable');
-                var start = removable.length/2;
-                for(i=start; i < removable.length ; i++){
+                var removable =  $('#processContainer').find('.removable');
+                for(i=0; i < removable.length ; i++){
                     removable[i].remove();
                 }
+
+               $("#viewModal").html($("#processContainer").html());
                 
-                
-                
-               $("#myModal").html($("#processContainer").html());
-               $("#myModal").modal({});
+                $("#processContainer").html('');
+               $("#editModal").modal('hide');
+               $("#viewModal").modal({});
+            
                 
             }
         }
@@ -177,36 +201,29 @@
             </nav>
         </div>
         <div class="container-fluid" id="DashBoardDiv">
-            <div class="row">
-                <div class="pull-right">
-               <button class="btn btn-primary" id="liveViewPromoBtn"> View Live Promo</button>
-                </div>
-                <br>
-            </div>
             
-            <div class="row">
-                
-                <div class="col-md-2"></div>
-                
-                <!-- Contains the Preview Form layer -->
-                <div class="col-md-10" id="formHTMLEditContainer">
-                    
-                </div>
-                
-            </div>
-            
-            <div class="" style="z-index:20000; position:fixed; top : 100px;">
-                
+            <!-- contains the edit form actions -->
+            <div id="editbtngrp" style="z-index:20000; position:fixed; top : 100px; right: 20px;">
                 <div class="btn-group-vertical">
-                   <button class="btn btn-primary">Continue with default form</button>
+                   <button class="btn btn-primary" id="liveViewPromoBtn"> View Live Promo</button>
+                    <br>
+                    <button class="btn btn-success edit-form" id="edit-form">Edit this form</button>
+                    <br>
+                    <button class="btn btn-default" id=""> Done</button>
+                </div>
+            </div>
+            
+            <!-- Contains the inital actions -->
+            <div id="actionbtngrp" style="z-index:20000; position:fixed; top : 100px;">
+                <div class="btn-group-vertical">
+                   <button class="btn btn-primary" id="continue-form">Continue with default form</button>
                    <br>
-                   <button class="btn btn-success">Edit this form</button>
+                   <button class="btn btn-success edit-form" id="edit-form">Edit this form</button>
                    <br>
-                   <button class="btn btn-default">Done</button>
                 </div>
             </div>
 
-        <!--Append the final code here -->
+            <!--Append the final code here -->
             <div class="row" id="output" style="margin-top:3%;">
                 
                 <div class="col-md-3"></div>
@@ -217,8 +234,7 @@
                 
             </div>
             
-            
-            
+            <!-- Clearfix -->
             <div class="row"><br><br></div>
             
                 
@@ -228,8 +244,20 @@
         
 <!--        Live promo modal show -->
        
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true">
 
+            </div>
+            
+            
+<!--        Edit promo modal show -->
+            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true">
+                 <!-- Container row for the Final Edit Form View -->
+                <div class="row" id="formHTMLRow" >
+                    <!-- Contains the Edit Form layer loaded via views -->
+                    <div class="col-md-12" id="formHTMLEditContainer">  
+                    </div>
+                </div>
+                
             </div>
         
         <div id="processContainer" style="display:none;">
@@ -244,7 +272,7 @@
         <div class="modal-dialog">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <button type="button" class="close" ><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                             <h4 class="formHeading" contenteditable="true" >Feedback</h4>
                             <p contenteditable="true" class="formDescription">Please tell us what do you think, any kind of feedback is highly appreciated !</p>
                           </div>
@@ -252,28 +280,45 @@
                                <div class="panel-default" id="panel-elements">
                                     <div class="panel-heading"> 
                                         <span class="glyphicon glyphicon-shopping-cart"> </span>
-                                        <span class="panel-text" style="padding-left:5px" contenteditable="true" >Like</span> 
+                                        <span class="panel-text" style="padding-left:5px" contenteditable="true" >Like</span>
+                                         <div class="removable edit-remove-element" remove-element="">
+                                            <a href="#"  class="remove-anchor" style="color:#A82400; text-decoration:none">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="panel-heading"> 
                                         <span class="glyphicon glyphicon-shopping-cart"> </span>
                                         <span class="panel-text" style="padding-left:5px" contenteditable="true" >Question</span> 
+                                        <div class="removable edit-remove-element" remove-element="">
+                                            <a href="#" class="remove-anchor" style="color:#A82400; text-decoration:none">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="panel-heading"> 
                                         <span class="glyphicon glyphicon-shopping-cart"> </span>
                                         <span class="panel-text" style="padding-left:5px" contenteditable="true" >Suggestion</span> 
+                                        <div class="removable edit-remove-element" remove-element="">
+                                            <a href="#"  class="remove-anchor" style="color:#A82400; text-decoration:none">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="panel-heading"> 
                                         <span class="glyphicon glyphicon-shopping-cart"> </span>
                                         <span class="panel-text" style="padding-left:5px" contenteditable="true" >Problem</span> 
+                                        <div class="removable edit-remove-element" remove-element="">
+                                            <a href="#"  class="remove-anchor" style="color:#A82400; text-decoration:none">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="removable" align="center" style="padding-top:10px">
                                     <a href="#" class="add-panel-element"> <span class="glyphicon glyphicon-plus">Add</span> </a>
                                 </div>
-                                 <div class="removable edit-remove-element" remove-element="">
-                                     <!-- <span class="glyphicon glyphicon-pencil"></span> -->
-                                     <a href="#" style="color:#A82400; text-decoration:none"><span class="glyphicon glyphicon-remove"></span></a>
-                                 </div>
+                                
                           </div>
                           <div class="modal-footer">
                             <div align="center" class="removable">
