@@ -130,8 +130,9 @@
   // A function to process messages received by the window.
   function receiveMessage(e) {
     // Check to make sure that this message came from the correct domain.
-    if (e.origin !== "http://s.codepen.io")
-      return;
+//    if (e.origin !== "http://www.viralmint.com")
+//      return;
+      console.log(e);
 
     // Update the div element to display the message.
     messageEle.innerHTML = "Message Received: " + e.data;
