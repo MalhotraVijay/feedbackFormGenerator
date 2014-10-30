@@ -1,0 +1,47 @@
+<html>
+
+<head>
+    
+    <script type="text/javascript">
+        window.onload = function() {
+	// Get the window displayed in the iframe.
+	var receiver = document.getElementById('receiver').contentWindow;
+  
+	// Get a reference to the 'Send Message' button.
+	var btn = document.getElementById('send');
+
+	// A function to handle sending messages.
+	function sendMessage(e) {
+		// Prevent any default browser behaviour.
+		e.preventDefault();
+
+		// Send a message with the text 'Hello Treehouse!' to the new window.
+		receiver.postMessage('Hello Treehouse!', 'http://demos.mattwest.io');
+	}
+
+	// Add an event listener that will execute the sendMessage() function
+	// when the send button is clicked.
+	btn.addEventListener('click', sendMessage);
+}
+
+    </script>
+    
+</head>
+
+<body>
+
+
+    <h1>Controller Window</h1>
+    <p>
+        This document is on the domain: http://codepen.io
+    </p>
+    <p>
+        <button id="send">Send Message</button>
+    </p>
+
+    <iframe id="receiver" src="http://www.viralmint.com/feedbackapp/fdapp/app/templates/formBuilder-new.html" width="500" height="200">
+        <p>Your browser does not support iframes.</p>
+    </iframe>
+</body>
+
+</html>

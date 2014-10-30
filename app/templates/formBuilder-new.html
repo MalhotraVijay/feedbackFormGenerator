@@ -167,7 +167,8 @@
             $("#done-btn").click(function(){
                 var formObject = {
                     json : {},
-                    html : ""
+                    html : "",
+                    modalHeight : "500px"
                 };
                 
                 var panelFieldsHtml = $('#viewModal').find('.panel-text');
@@ -191,10 +192,22 @@
                 }
                 
                 
+                //computing height for the view modal
+                try{
+                    var viewModal = document.getElementsByClassName("view-modal-container")[0];
+                    var style = window.getComputedStyle(viewModal, null);
+                    var modalHeight = style.height ;
+                }catch(e){
+                    var modalHeight = "500px";
+                }
+                
                 //console.log(panelFieldsHtml);
                 formObject.json = jsonObj;
                 formObject.html = $('#viewModal').html();
+                formObject.modalHeight = modalHeight
                 console.log(formObject);
+                
+                $(document) = null;
                 
                 
             });
@@ -416,7 +429,6 @@
                                 <option value="textArea">Text Area</option>
                                 <option value="checkBox">Checkbox</option>
                                 <option value="radioButton">Multiple choices</option>
-                                <option value="listBox">List Dropdown</option>
                                 <option value="listBox">List Dropdown</option>
                             </select>
                         </div>
