@@ -207,7 +207,8 @@
                 formObject.modalHeight = modalHeight
                 console.log(formObject);
                 
-                $(document) = null;
+                window.sendMessage(formObject,'http://localhost');
+                
                 
                 
             });
@@ -251,6 +252,35 @@
         }
 
     </script>
+    
+    
+    <!-- Script for sending and accepting the postMessages from the parent window    -->
+    <script type="text/javascript">
+        
+        window.onload = function() {
+          // A function to process messages received by the window.
+            window.receiveMessage = function(e) {
+            // Check to make sure that this message came from the correct domain.
+            //    if (e.origin !== "http://www.viralmint.com")
+            //      return;
+              console.log(e);
+
+            // Update the div element to display the message.
+            //Do what ever with the message 
+          }
+          
+          window.sendMessage = function(obj,url){
+              window.parent.postMessage(obj,url);
+          }
+
+          // Setup an event listener that calls receiveMessage() when the window
+          // receives a new MessageEvent.
+          window.addEventListener('message', window.receiveMessage);
+        }
+    
+        
+    </script>
+    
 
 </head>
 

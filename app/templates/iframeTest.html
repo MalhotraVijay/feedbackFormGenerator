@@ -3,25 +3,46 @@
 <head>
     
     <script type="text/javascript">
+        
+        
         window.onload = function() {
-	// Get the window displayed in the iframe.
-	var receiver = document.getElementById('receiver').contentWindow;
+            
+	   // Get the window displayed in the iframe.
+	   var iframeWindow = document.getElementById('receiver').contentWindow;
   
-	// Get a reference to the 'Send Message' button.
-	var btn = document.getElementById('send');
+	   // Get a reference to the 'Send Message' button.
+	   //var btn = document.getElementById('send');
 
-	// A function to handle sending messages.
-	function sendMessage(e) {
-		// Prevent any default browser behaviour.
-		e.preventDefault();
+	   // A function to handle sending messages.
+	   function sendMessage(e) {
+		  // Prevent any default browser behaviour.
+		  e.preventDefault();
 
-		// Send a message with the text 'Hello Treehouse!' to the new window.
-		receiver.postMessage('Hello Treehouse!', 'http://www.viralmint.com/');
-	}
+		  // Send a message with the text 'Hello Treehouse!' to the new window.
+		  iframeWindow.postMessage('Hello This is the parent Browser sending message !', 'http://www.viralmint.com/');
+	   }
 
-	// Add an event listener that will execute the sendMessage() function
-	// when the send button is clicked.
-	btn.addEventListener('click', sendMessage);
+        // Add an event listener that will execute the sendMessage() function
+        // when the send button is clicked.
+        //btn.addEventListener('click', sendMessage);
+    
+    
+            
+
+          // A function to process messages received by the window.
+          function receiveMessage(e) {
+            // Check to make sure that this message came from the correct domain.
+        //    if (e.origin !== "http://www.viralmint.com")
+        //      return;
+              console.log(e);
+              console.log(e.data);
+          }
+
+          // Setup an event listener that calls receiveMessage() when the window
+          // receives a new MessageEvent.
+          window.addEventListener('message', receiveMessage);
+            
+    
 }
 
     </script>
@@ -39,7 +60,7 @@
         <button id="send">Send Message</button>
     </p>
 
-    <iframe id="receiver" src="http://www.viralmint.com/feedbackapp/fdapp/app/templates/formBuilder.html" width="500" height="200">
+    <iframe id="receiver" src="http://www.viralmint.com/feedbackapp/fdapp/app/templates/formBuilder-new.html" width="960" height="600">
         <p>Your browser does not support iframes.</p>
     </iframe>
 </body>
