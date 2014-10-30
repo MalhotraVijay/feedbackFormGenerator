@@ -88,6 +88,10 @@
             display: none;
         }
         
+        #done-btn{
+            display: none;
+        }
+        
         
     </style>
     
@@ -120,7 +124,13 @@
                 
             });
             
-            $('#liveViewPromoBtn').click(vmlib.showLivePromo);
+            $('#liveViewPromoBtn').click(function(){
+                $("#done-btn").show();
+                $("#edit-form").show();
+                $("#liveViewPromoBtn").hide();
+                vmlib.showLivePromo();    
+            });
+            
             
             
             $('.panel-heading').hover(function(){    
@@ -149,6 +159,44 @@
                 $("#editModal").modal('show');
                 $("#actionbtngrp").hide();
                 $("#editbtngrp").show();
+                $("#liveViewPromoBtn").show();
+                $("#done-btn").hide();
+                $("#edit-form").hide();
+            });
+            
+            $("#done-btn").click(function(){
+                var formObject = {
+                    json : {},
+                    html : ""
+                };
+                
+                var panelFieldsHtml = $('#viewModal').find('.panel-text');
+                var formListGroup = [];
+                panelFieldsHtml.each(function(index,el){
+                    formListGroup.push(el.innerHTML);
+                });
+                
+                var formAllElements = [];
+                formElementCollection.models.forEach(function(el,i){
+                    formAllElements.push(el.attributes);
+                });
+                
+                
+                
+                var jsonObj = {
+                    formHeading : $('#viewModal').find('.formHeading').html() || "",
+                    formDescription : $('#viewModal').find('.formDescription').html() || "",
+                    formListGroup : formListGroup,
+                    formAllElements : formAllElements
+                }
+                
+                
+                //console.log(panelFieldsHtml);
+                formObject.json = jsonObj;
+                formObject.html = $('#viewModal').html();
+                console.log(formObject);
+                
+                
             });
             
         });
@@ -211,7 +259,7 @@
                     <br>
                     <button class="btn btn-success edit-form" id="edit-form">Edit this form</button>
                     <br>
-                    <button class="btn btn-default" id=""> Done</button>
+                    <button class="btn btn-default" id="done-btn"> Done</button>
                 </div>
             </div>
             
@@ -357,18 +405,19 @@
                 <form role="form" method="get" id="formGeneratorWidget" action="">
 
                     <div class="form-group">
-                        <input type="text" class="form-control" id="fieldTitle" placeholder="Field title" name="fieldTitle">
+                        <input type="text" class="form-control" id="fieldTitle" placeholder="Field Placeholder (Ex: Email)" name="fieldTitle">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="fieldHelp" placeholder="Field Help" name="fieldHelp">
+                        <input type="text" class="form-control" id="fieldHelp" placeholder="Field Help (Ex : Email is compulsory)" name="fieldHelp">
                     </div>
                         <div class="form-group">
                             <select name="fieldType" id="fieldType" class="form-control">
-                                <option value="inputBox">Inputbox</option>
-                                <option value="textArea">TextArea</option>
+                                <option value="inputBox">Input Field</option>
+                                <option value="textArea">Text Area</option>
                                 <option value="checkBox">Checkbox</option>
-                                <option value="radioButton">RadioButton</option>
-                                <option value="listBox">ListBox</option>
+                                <option value="radioButton">Multiple choices</option>
+                                <option value="listBox">List Dropdown</option>
+                                <option value="listBox">List Dropdown</option>
                             </select>
                         </div>
                         <div class="form-group" id="fieldValuesDiv"></div>

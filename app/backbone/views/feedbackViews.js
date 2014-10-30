@@ -43,7 +43,7 @@ app.Views.FormIndexView = Backbone.View.extend({
             if($(this).val()=="checkBox"||
                 $(this).val() == "radioButton" ||
                 $(this).val() == "listBox"){
-                var inputElement = '<input type="text" class="form-control" id="fieldValues" placeholder="Comma seperated field values" name="fieldValues">'
+                var inputElement = '<input type="text" class="form-control" id="fieldValues" placeholder="Comma seperated values (Ex: Male,Female)" name="fieldValues">'
                 $("#fieldValuesDiv").html(inputElement);
             }else{
                 $("#fieldValuesDiv").html("")
