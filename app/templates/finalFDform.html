@@ -1,4 +1,3 @@
-
 <html>
 
 <head>
@@ -88,8 +87,13 @@
         }
         
         body, .fd-modal-container{
+            
+            height: 500px;
+            
             width: 500px;
-            height: auto; 
+            
+            
+            
         }
         
     </style>
@@ -99,80 +103,19 @@
 
 <body>
     <div class="fd-modal-container">
+
+
         
 <!--        Live promo modal show -->
        
             <div class="modal" id="viewModal" style="display:block" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true">
-              <div class="view-modal-container">
-                
-                       <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <button type="button" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                            <h4 class="formHeading">Feedback</h4>
-                            <p class="formDescription">Please tell us what do you think, any kind of feedback is highly appreciated !</p>
-                          </div>
-                          <div class="modal-body">
-                               <div class="panel-default" id="panel-elements">
-                                    <div class="panel-heading"> 
-                                        <span class="glyphicon glyphicon-shopping-cart"> </span>
-                                        <span class="panel-text" style="padding-left:5px">Like</span>
-                                         
-                                    </div>
-                                    <div class="panel-heading"> 
-                                        <span class="glyphicon glyphicon-shopping-cart"> </span>
-                                        <span class="panel-text" style="padding-left:5px">Question</span> 
-                                        
-                                    </div>
-                                    <div class="panel-heading"> 
-                                        <span class="glyphicon glyphicon-shopping-cart"> </span>
-                                        <span class="panel-text" style="padding-left:5px">Suggestion</span> 
-                                        
-                                    </div>
-                                    <div class="panel-heading"> 
-                                        <span class="glyphicon glyphicon-shopping-cart"> </span>
-                                        <span class="panel-text" style="padding-left:5px">Problem</span> 
-                                        
-                                    </div>
-                                </div>
-                                
-                                
-                          </div>
-                          <div class="modal-footer">
-                            
-                            <div id="form-elements"></div>
-                            
-                            <!--  The formBuilder is loaded in this div-->
-                            <div class="" id="primaryTemplate"><div>
-        <div class="col-md-12" id="feebackFormHtmlContainer">
-            <form role="form" method="post" id="feedbackForm" name="feedbackForm"><div class="form-container"><div class="row form-element">
-        <div class="col-md-10" style="padding-bottom:3px;"><span style=" padding:2px; font-size:12px;">* Enter your Email ID</span></div>
-        
-        
-        <div class="col-md-12">
-            <div class="form-group">
-               <input type="text" name="Email_0" id=" Email_0" placeholder="Email" class="form-control">
-            </div>
-        </div>
-    </div><div class="row form-element">
-        <div class="col-md-10" style="padding-bottom:3px;"><span style=" padding:2px; font-size:12px;">* Message </span></div>
-        
-        <div class="col-md-12">
-            <div class="form-group">
-               <textarea name="Message_1" id="Message_1" placeholder="Message"></textarea>
-            </div>
-        </div>
-    </div></div></form>
-        </div>       
-        
-    </div></div>
-                            
-                            <button type="button" class="btn btn-primary">Submit</button>
-                          </div>
-                        </div>
-                    </div>
-                          
-              </div>
+          
+              {% if 'web' in publish_to and
+					'pre_cond' in publish_to.web %}        
+                 {{ publish_to.web.pre_cond.form_fill.0.feedback_html }}
+             {% endif %}
+          
+          
             </div>
 
     </div>
@@ -181,11 +124,10 @@
 
 
     {{hfields}}
-<!--
-<script type="text/javascript">
-    $(document).ready(function(){
-       $("#viewModal").modal('show'); 
-    });
-</script>
--->
+    <script type="text/javascript">
+        window.jsonObj = {{ publish_to.web.pre_cond.form_fill.0.feedback_json }};
+        console.log(window.jsonObj);
+        $('body , .fd-modal-container').css('height',jsonObj.conf.modalHeight);
+    </script>
+
 </html>

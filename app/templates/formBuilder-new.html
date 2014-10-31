@@ -201,21 +201,26 @@
                 
                 //computing height for the view modal
                 try{
-                    var viewModal = document.getElementsByClassName("modal-dialog")[0];
+                    var viewModal = document.getElementsByClassName("view-modal-container")[0];
                     var style = window.getComputedStyle(viewModal, null);
                     
+                    console.log('style:' );
                     modalHeight = style.height ;
                     
+                    
+                    console.log(modalHeight);
                     if(style.height == "auto"){
                         console.log("Failed to calculate the height, Setting Default");
                         modalHeight = "505px";
                     }
                     
                 }catch(e){
-                    var modalHeight = "505px";
+                    modalHeight = "505px";
                 }
                 
                 //console.log(panelFieldsHtml);
+                
+                jsonObj.conf.modalHeight = modalHeight;
                 
                 //construct the final feedback form object
                 formObject.data.json = jsonObj;
