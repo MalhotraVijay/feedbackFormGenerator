@@ -165,10 +165,16 @@
             });
             
             $("#done-btn").click(function(){
+                
                 var formObject = {
-                    json : {},
-                    html : "",
-                    modalHeight : "500px"
+                    data : {
+                        json : {},
+                        html : "",
+                        conf : {
+                            modalHeight : "500px"
+                        }
+                    },
+                    status : ""
                 };
                 
                 var panelFieldsHtml = $('#viewModal').find('.panel-text');
@@ -202,12 +208,16 @@
                 }
                 
                 //console.log(panelFieldsHtml);
-                formObject.json = jsonObj;
-                formObject.html = $('#viewModal').html();
-                formObject.modalHeight = modalHeight
+                
+                formObject.data.json = jsonObj;
+                formObject.data.html = $('#viewModal').html();
+                formObject.data.conf.modalHeight = modalHeight;
+                formObject.status = "DONE" ;
+                
                 console.log(formObject);
                 
                 window.sendMessage(formObject,'http://localhost');
+                window.sendMessage(formObject,'http://clients.staging.viralmint.com');
                 
                 
                 
