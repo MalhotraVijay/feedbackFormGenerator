@@ -169,10 +169,7 @@
                 var formObject = {
                     data : {
                         json : {},
-                        html : "",
-                        conf : {
-                            modalHeight : "505px"
-                        }
+                        html : ""
                     },
                     status : ""
                 };
@@ -194,7 +191,10 @@
                     formHeading : $('#viewModal').find('.formHeading').html() || "",
                     formDescription : $('#viewModal').find('.formDescription').html() || "",
                     formListGroup : formListGroup,
-                    formAllElements : formAllElements
+                    formAllElements : formAllElements,
+                    conf : {
+                        modalHeight : "505px"
+                    }
                 }
                 
                 var modalHeight = "505px" ;
@@ -217,9 +217,9 @@
                 
                 //console.log(panelFieldsHtml);
                 
+                //construct the final feedback form object
                 formObject.data.json = jsonObj;
-                formObject.data.html = $('#viewModal').html();
-                formObject.data.conf.modalHeight = modalHeight;
+                formObject.data.html = $('#viewModal').html() || " <html> CUSTOM ERROR: NONTYPE </html>";
                 formObject.status = "DONE" ;
                 
                 console.log(formObject);
