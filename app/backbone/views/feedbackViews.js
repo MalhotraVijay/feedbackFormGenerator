@@ -145,7 +145,8 @@ app.Views.FormAddNewView = Backbone.View.extend({
         
         var formHTML = formElementCollectionView.render().el;
         //add the form to the html
-        $('#feedbackForm').html(formHTML);
+        
+        $('#user_input').html(formHTML);
 
         //add the form text to the html
         var formHtmlCode = $('#feebackFormHtmlContainer').html() || "";

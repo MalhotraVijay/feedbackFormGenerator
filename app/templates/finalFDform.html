@@ -125,9 +125,257 @@
 
     {{hfields}}
     <script type="text/javascript">
+        
         window.jsonObj = {{ publish_to.web.pre_cond.form_fill.0.feedback_json }};
         console.log(window.jsonObj);
         $('body , .fd-modal-container').css('height',jsonObj.conf.modalHeight);
+        
+        $(document).ready(function(){
+           
+            $('#submitFdFormBtn').click(function(){
+                vrlmntclt.actions.submitFeedback();
+            });
+            
+            vrlmntclt.events.bind('beforeUnlock', function(e) {
+                
+            });
+            
+            
+            vrlmntclt.events.bind('unlock', function(e){
+                coupon_code = e.coupon;
+                var unlock_action = e.action;
+                
+                console.log(e);
+            });
+            
+            
+        });
+        
     </script>
+    
+    
+<!--
+    <script type="text/javascript">
+		var widget_form_fill_email = '';
+		var coupon_code ='';
+
+		$(document).ready(function(){
+			
+            
+
+			$('#widget-form-fill').submit(function(){
+				var submit_form = true;
+				$("#widget-form-fill input").each(function() {
+					var data = $(this).val();
+                	var data_type = $(this).attr('data-type');
+                	if(data_type=='email'){
+                		if(!IsEmail(data)){
+                			$('#form-field-error-msg').html('Please enter a valid email.');
+                			$('.form-field-error').show();
+                			submit_form = false;
+                		} else {
+                			widget_form_fill_email = data;
+                		}
+                	} else if(data_type=='mobile'){
+                		if(!IsMobile(data)){
+                			$('#form-field-error-msg').html('Please enter a valid mobile number.');
+                			$('.form-field-error').show();
+                			submit_form = false;
+                		}
+                	}
+            	});
+
+            	if(submit_form){
+            		$('.vm_copy_clip-error').html('');
+            		$('.form-field-error').hide();
+            		vrlmntclt.actions.submitForm();
+            	}
+            	return false;
+			});
+			
+		});
+
+		vrlmntclt.events.bind('beforeUnlock', function(e) {
+			var extra_data = $('#extra_data').val();
+			if (extra_data == '') {
+				$('.extra-data-error').show();
+				return false;
+			} else {
+				$('.extra-data-error').hide();
+				return true;
+			}
+		});
+
+		vrlmntclt.events.bind('unlock', function(e){
+			coupon_code = e.coupon;
+			var unlock_action = e.action;
+ 			if(coupon_code=='NOCOUPONCODE'){
+            	$('#vm-unlock-msg').show();
+            	togglesharewithdiv_opp();
+				return;
+            }
+
+			switch(unlock_action){
+					case 'fb_connect':{
+							$('#vm-unlock-msg').show();
+							if(coupon_code=='fCOND'){
+								$('#fb-connect-unlock-msg').show();
+								$('.fb-connect-unlock-hide').hide();
+							}else{
+								$('#vm-unlock-msg').show();
+								togglesharewithdiv_opp();							
+							}
+						break;
+					}
+
+					default:{
+						$('#vm-unlock-msg').show();
+						togglesharewithdiv();
+						break;
+					}
+				}
+
+				// send email if form fill email
+				// if(widget_form_fill_email!=''){
+				// 	vrlmntclt.actions.emailCoupon({
+				//         email: widget_form_fill_email
+				// 	});
+				// 	$('#email').hide();
+				// }
+		});
+		
+		$(document).click(function(){
+			$(".tooltip").addClass("hide");
+			$(".tooltip").removeClass("show");
+			$(".arrow-down").addClass("hide");
+			$(".arrow-down").removeClass("show");
+		});
+
+		$("#email").click(function(){
+			$("#users_email_id_span").show();
+			$('#users_email_id').blur();
+			$(".coupon-div").removeClass("show");
+			$(".coupon-div").addClass("hide");
+			$(".span").hide();
+			$(".continue_shop").addClass("hide");
+			$(".continue_shop").removeClass("show");
+			$(".submit").addClass("show");
+			$(".submit").removeClass("hide");
+			$(".back").addClass("show");
+			$(".back").removeClass("hide");
+			$(".or").addClass("show");
+			$(".or").removeClass("hide");
+			$(".show-tc").addClass("hide");
+			$(".show-tc").removeClass("show");
+		});
+
+		$(".back").click(function(){
+			$('#error-email-id').html('');
+			$("#users_email_id_span").hide();			
+			$(".coupon-div").removeClass("hide");
+			$(".coupon-div").addClass("show");
+			$(".span").show();
+			//$(".span").html("&#x25B2; Here is your exclusive coupon! Use it at checkout!");
+			$(".continue_shop").addClass("show");
+			$(".continue_shop").removeClass("hide");
+			$(".submit").addClass("hide");
+			$(".submit").removeClass("show");
+			$(".back").addClass("hide");
+			$(".back").removeClass("show");
+			$(".or").addClass("hide");
+			$(".or").removeClass("show");
+			$(".show-tc").addClass("show");
+			$(".show-tc").removeClass("hide");
+		});
+
+		$(".submit").click(function(){
+			$('#error-email-id').html('');
+			var email_id = $('#users_email_id').val();
+			if(!IsEmail(email_id)){
+				$('#error-email-id').html('Please enter valid email address.');
+				return false;
+			}
+			// Send email code
+			vrlmntclt.actions.emailCoupon({
+		        email: email_id,
+		        error: function(msg){
+		        	$('#error-email-id').html(msg);
+					return false;
+		        },
+		        success: function(){
+		        	$(".textbox").hide();
+					$(".span").addClass("hide");
+					$(".span").removeClass("show");
+					$(".submit").hide();
+					$(".or").hide();
+					$(".back").hide();
+					$(".sent-msg").addClass("show");
+					$(".sent-msg").removeClass("hide");
+					$(".continue_shop").addClass("show");
+					$(".continue_shop").removeClass("hide");
+		        }
+			});
+		});
+		
+		function slide(){
+			if($(".terms-conditions").is(":hidden")) {
+				$(".display-coupon").slideUp("1000");
+				$(".terms-conditions").slideDown("1000");
+			}
+			else{
+				$(".terms-conditions").slideUp("1000");
+				$(".display-coupon").slideDown("1000");
+			}
+		}
+
+		function SelectText(element) {
+		    var doc = document
+		        , text = doc.getElementById(element)
+		        , range, selection
+		    ;    
+		    if (doc.body.createTextRange) {
+		        range = document.body.createTextRange();
+		        range.moveToElementText(text);
+		        range.select();
+		    } else if (window.getSelection) {
+		        selection = window.getSelection();        
+		        range = document.createRange();
+		        range.selectNodeContents(text);
+		        selection.removeAllRanges();
+		        selection.addRange(range);
+		    }
+		}
+
+		$(".coupon-box").mouseover(function(){
+			$(".coupon-box").css({"cursor":"copy"});
+			SelectText("coupon_code");
+			$(".tooltip").addClass("show");
+			$(".tooltip").removeClass("hide");
+			$(".arrow-down").addClass("show");
+			$(".arrow-down").removeClass("hide");
+		});
+		
+		function IsEmail(email){
+			var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+			return regex.test(email);
+		}
+
+		function IsMobile(mobile){
+			if(mobile.length<10){
+				return false;
+			}
+			var regex = new RegExp('^\\d+$');
+    		return (regex.test(mobile));
+		}
+
+
+	</script>
+    
+    
+    
+    
+-->
+    
+    
 
 </html>
