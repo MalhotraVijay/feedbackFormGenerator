@@ -111,7 +111,7 @@
             console.log(e);
                 
             if(typeof e.data == 'object' ){
-                window.editJsonData = e.data.data.json;
+                window.editJsonData = e.data;
                 window.triggerFormEdit();
             }else if(typeof e.data == 'string'){
                 window.triggerDefault();
@@ -443,6 +443,7 @@
                 jsonData : window.editJsonData
             });
             
+            performFormBuild();
             
         }
         
