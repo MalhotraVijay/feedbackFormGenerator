@@ -19,7 +19,7 @@
 		  e.preventDefault();
 
 		  // Send a message with the text 'Hello Treehouse!' to the new window.
-		  iframeWindow.postMessage('Hello This is the parent Browser sending message !', 'http://www.viralmint.com/');
+		  iframeWindow.postMessage({}, 'http://www.viralmint.com/');
 	   }
 
         // Add an event listener that will execute the sendMessage() function

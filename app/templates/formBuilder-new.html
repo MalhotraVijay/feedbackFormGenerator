@@ -111,6 +111,7 @@
             console.log(e);
                 
             if(typeof e.data == 'object' ){
+                window.editJsonData = e.data.data.json;
                 window.triggerFormEdit();
             }else if(typeof e.data == 'string'){
                 window.triggerDefault();
@@ -168,7 +169,7 @@
             </div>
 
             <!--Append the final code here -->
-            <div class="row" id="output" style="margin-top:3%;">
+            <div class="row" id="output" style="margin-top:3%; display:none;">
                 
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
@@ -302,15 +303,17 @@
     </script>
     
     <script type="text/template" id="panelElementsTemplate">
-        <div class="panel-heading"> 
-            <span class="glyphicon glyphicon-thumbs-up"> </span>
-            <span class="panel-text" style="padding-left:5px" contenteditable="true" >Like {{name}}</span>
-             <div class="removable edit-remove-element" remove-element="">
-                <a href="#"  class="remove-anchor" style="color:#A82400; text-decoration:none">
-                <span class="glyphicon glyphicon-remove"></span>
-                </a>
+        <@ _.each(formListGroup, function(group) { @>   
+            <div class="panel-heading"> 
+                <span class="{{group.gicon}}"> </span>
+                <span class="panel-text" style="padding-left:5px" contenteditable="true" > {{group.elementText}}</span>
+                 <div class="removable edit-remove-element" remove-element="">
+                    <a href="#"  class="remove-anchor" style="color:#A82400; text-decoration:none">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                </div>
             </div>
-        </div>
+        <@ }); @>
     </script>
     
      
@@ -389,7 +392,46 @@
         
         var triggerDefault = function(){
             var router = new app.mainRoutes({
-                formElementCollection : window.formElementCollection
+                formElementCollection : window.formElementCollection,
+                jsonData : {
+                    formListGroup : [
+                        {
+                            gicon : 'glyphicon glyphicon-thumbs-up',
+                            elementText : 'Like'
+                        },
+                        {
+                            gicon : 'glyphicon glyphicon-pencil',
+                            elementText : 'Question'
+                        },
+                        {
+                            gicon : 'glyphicon glyphicon-comment',
+                            elementText : 'Suggestion'
+                        },
+                        {
+                            gicon : 'glyphicon glyphicon-pushpin',
+                            elementText : 'Problem'
+                        }
+                    ],
+                    formAllElements : [
+                        {
+                                id:id++,
+                                fieldTitle : 'Email',
+                                fieldHelp : '* Enter your Email ID',
+                                fieldType : 'inputBox',
+                                fieldValues : []
+                        },
+                        {
+                                id:id++,
+                                fieldTitle : 'Message',
+                                fieldHelp : '* Message ',
+                                fieldType : 'textArea',
+                                fieldValues : []
+                        }
+                        
+                    ],
+                    formHeading : 'Feedback',
+                    formDescription : 'Please tell us what do you think, any kind of feedback is highly appreciated !'
+                }                
             });
             
             performFormBuild();
@@ -397,8 +439,11 @@
         
         var triggerFormEdit = function(){
             var router = new app.mainRoutes({
-                formElementCollection : window.formElementCollection
+                formElementCollection : window.formElementCollection,
+                jsonData : window.editJsonData
             });
+            
+            
         }
         
 
@@ -485,15 +530,21 @@
                 var panelFieldsHtml = $('#viewModal').find('.panel-text');
                 var formListGroup = [];
                 panelFieldsHtml.each(function(index,el){
-
+                    
+                    previousEl = el.previousSibling;
+                    
+                    console.log(previousEl.nodeName);
+                    
+                    var gicon = (previousEl.nodeName == '#text' ? previousEl.previousSibling.getAttribute('class'): previousEl.getAttribute('class') );
+                    
                     var listGroupElement = {
-                        gicon : el.previousSibling.previousSibling.getAttribute('class'), 
+                        gicon :  gicon, 
                         elementText : el.innerHTML
                     };
                     formListGroup.push(listGroupElement);
                 });
 
-                var formAllElements = [];
+                var formAllElements = []; 
                 formElementCollection.models.forEach(function(el,i){
                     formAllElements.push(el.attributes);
                 });

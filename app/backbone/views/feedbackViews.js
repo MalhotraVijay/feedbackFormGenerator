@@ -21,7 +21,8 @@ app.Views.FormIndexView = Backbone.View.extend({
         formEditViewTemplate : $("#formEditViewTemplate").html()
     },
 
-    initialize: function () {
+    initialize: function (jsonData) {
+        this.jsonData = jsonData;
     },
 
     render: function () {
@@ -37,13 +38,13 @@ app.Views.FormIndexView = Backbone.View.extend({
         
         //add the panel elements in the desired container
         
-        var addPanelView = new app.Views.AddPanelView;
+        var addPanelView = new app.Views.AddPanelView(this.jsonData);
         
         $("#panel-elments-container").html(addPanelView.render().el);
         
         
         //call the addNewElement to call the init for adding new product.
-        var formAddNewView = new app.Views.FormAddNewView;
+        var formAddNewView = new app.Views.FormAddNewView(this.jsonData);
         
         $("#primaryTemplate").html(formAddNewView.render().el);
         formAddNewView.addDefault();
@@ -93,30 +94,23 @@ app.Views.FormAddNewView = Backbone.View.extend({
         formAddNewTemplate : $("#formAddNewTemplate").html()
     },
 
-    initialize: function () {
+    initialize: function (jsonData) {
+        this.jsonData = jsonData;
     },
     
     addDefault : function(){
         
-        //adding 2 objects by default
-        console.log("In the form view edit function");
-        this.addElement({ formItems : {
-                                id:id++,
-                                fieldTitle : 'Email',
-                                fieldHelp : '* Enter your Email ID',
-                                fieldType : 'inputBox',
-                                fieldValues : []
-                            }
-                        });
+        //adding the default objects sent in the json created in the app router init call
+        console.log("In the form view edit function", this.jsonData);
         
-        this.addElement({ formItems : {
-                                id:id++,
-                                fieldTitle : 'Message',
-                                fieldHelp : '* Message ',
-                                fieldType : 'textArea',
-                                fieldValues : []
-                            }
-                        });
+        var jsonData = this.jsonData;
+        
+        for(i=0;i<jsonData['formAllElements'].length;i++){
+            
+            this.addElement({
+                formItems : jsonData['formAllElements'][i]
+            });
+        }
     },
 
     render: function () {
@@ -125,7 +119,6 @@ app.Views.FormAddNewView = Backbone.View.extend({
     },
     
     addElement: function(options){
-        console.log("event binded");
         
         $('.form-layer').css('display','none');
         
@@ -181,14 +174,19 @@ app.Views.AddPanelView = Backbone.View.extend({
     
     id : 'panel-elements',
     
+    initialize : function(jsonData){
+        this.jsonData = jsonData;
+    },
+    
     templates : {
         panelElementsTemplate: _.template($("#panelElementsTemplate").html()),
         panel : $("#panelElementsTemplate").html()
     },
     
     render : function(){
-        console.log("Adding the div");
-        this.$el.html(this.templates.panelElementsTemplate({"name":"vijay"}));
+        console.log("Adding the div,", this.jsonData);
+            
+        this.$el.html(this.templates.panelElementsTemplate(this.jsonData));
         return this;
     }
     
