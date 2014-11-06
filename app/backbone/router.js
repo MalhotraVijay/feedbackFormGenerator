@@ -15,9 +15,7 @@ app.mainRoutes = Backbone.Router.extend({
     initialize: function(options){
         //for the default url the form will be added to the DOM
         console.log(options.formElementCollection);
-        
         this.formElementCollection = options.formElementCollection;
-        
         this.formElementCollection.bind('remove', this.updateDebug, this);
         this.formElementCollection.bind('updateAll', this.updateDebug, this);
         
@@ -54,18 +52,13 @@ app.mainRoutes = Backbone.Router.extend({
     
     index: function () {
         //get the currentView and add that to the viewport
-        
+            
         this.currentView = new app.Views.FormIndexView({}); 
-        
-        //this will be called on the click of add button
-//        $('#primaryTemplate').html(this.currentView.render().el);
-        
         $('#formHTMLEditContainer').html(this.currentView.render().el);
-        
+
         //add few default elements to the form
         this.currentView.addDefault();
+        
     }
-
-
 
 });

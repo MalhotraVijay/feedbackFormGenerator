@@ -1,3 +1,12 @@
+//setting the underscore settings for the templates to work with handlerbar cases
+
+_.templateSettings = {
+      interpolate: /\{\{(.+?)\}\}/g,
+      evaluate: /\<\@(.+?)\@\>/gim
+};
+
+
+
 app.Views.FormIndexView = Backbone.View.extend({
 
     className: 'view-modal-container',
@@ -25,6 +34,14 @@ app.Views.FormIndexView = Backbone.View.extend({
     },
     
     addDefault : function(){
+        
+        //add the panel elements in the desired container
+        
+        var addPanelView = new app.Views.AddPanelView;
+        
+        $("#panel-elments-container").html(addPanelView.render().el);
+        
+        
         //call the addNewElement to call the init for adding new product.
         var formAddNewView = new app.Views.FormAddNewView;
         
@@ -158,11 +175,24 @@ app.Views.FormAddNewView = Backbone.View.extend({
 });
 
 
-
-_.templateSettings = {
-      interpolate: /\{\{(.+?)\}\}/g,
-      evaluate: /\<\@(.+?)\@\>/gim
-};
+app.Views.AddPanelView = Backbone.View.extend({
+   
+    className : 'panel-default',
+    
+    id : 'panel-elements',
+    
+    templates : {
+        panelElementsTemplate: _.template($("#panelElementsTemplate").html()),
+        panel : $("#panelElementsTemplate").html()
+    },
+    
+    render : function(){
+        console.log("Adding the div");
+        this.$el.html(this.templates.panelElementsTemplate({"name":"vijay"}));
+        return this;
+    }
+    
+});
 
 
 app.Views.FormElementAddView = Backbone.View.extend({

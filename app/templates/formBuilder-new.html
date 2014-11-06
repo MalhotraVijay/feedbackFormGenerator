@@ -95,185 +95,7 @@
         
     </style>
     
-    <script type="text/javascript">
-        
-        window.id = 0;
-        
-        $(document).ready(function () {
-            
-            
-            $('#output , #editbtngrp').hide();
-            vmlib.showLivePromo();
-            
-            
-            
-            $('.add-panel-element').click(function(){
-                
-                console.log("Added the element");
-                
-                
-                var panelElement = '<div class="panel-heading"> <span class="glyphicon glyphicon-shopping-cart"> </span><span class="panel-text" style="padding-left:5px" contenteditable="true" >Click her to edit the text</span><div class="removable edit-remove-element" remove-element=""><a href="#"  class="remove-anchor" style="color:#A82400; text-decoration:none"><span class="glyphicon glyphicon-remove"></span></a></div></div>'
-                
-                $('#panel-elements').append(panelElement);
-                $('.panel-heading').hover(function(){
-                
-                $('.panel-heading').find('.edit-remove-element').css('display','none');
-                $(this).find('.edit-remove-element').css('display','block');
-                
-            });
-                
-            });
-            
-            $('#liveViewPromoBtn').click(function(){
-                $("#done-btn").show();
-                $("#edit-form").show();
-                $("#liveViewPromoBtn").hide();
-                vmlib.showLivePromo();    
-            });
-            
-            
-            
-            $('.panel-heading').hover(function(){    
-                $('.panel-heading').find('.edit-remove-element').css('display','none');
-                $(this).find('.edit-remove-element').css('display','block');
-            });
-            
-//            $('.form-element').hover(function(){
-//                $('.panel-heading').find('.edit-remove-element').css('display','none');
-//                $(this).find('.edit-remove-element').css('display','block');
-//            });
-            
-            $('.panel-default').mouseleave(function(){
-               $('.edit-remove-element').css('display','none'); 
-            });
-            
-            $("#continue-form").click(function(){
-                $("#viewModal").modal('hide');
-                $("#processContainer , #viewModal").html('');
-                $("#actionbtngrp").hide();
-            });
-            
-            $(".edit-form").click(function(){
-                $("#processContainer , #viewModal").html('');
-                $("#viewModal").modal('hide');
-                $("#editModal").modal('show');
-                $("#actionbtngrp").hide();
-                $("#editbtngrp").show();
-                $("#liveViewPromoBtn").show();
-                $("#done-btn").hide();
-                $("#edit-form").hide();
-            });
-            
-            $("#done-btn , #continue-form").click(function(){
-                
-                var formObject = {
-                    data : {
-                        json : {},
-                        html : ""
-                    },
-                    status : ""
-                };
-                
-                var panelFieldsHtml = $('#viewModal').find('.panel-text');
-                var formListGroup = [];
-                panelFieldsHtml.each(function(index,el){
-                    formListGroup.push(el.innerHTML);
-                });
-                
-                var formAllElements = [];
-                formElementCollection.models.forEach(function(el,i){
-                    formAllElements.push(el.attributes);
-                });
-                
-                
-                
-                var jsonObj = {
-                    formHeading : $('#viewModal').find('.formHeading').html() || "",
-                    formDescription : $('#viewModal').find('.formDescription').html() || "",
-                    formListGroup : formListGroup,
-                    formAllElements : formAllElements,
-                    conf : {
-                        modalHeight : "505px"
-                    }
-                }
-                
-                var modalHeight = "505px" ;
-                
-                //computing height for the view modal
-                try{
-                    var viewModal = document.getElementsByClassName("view-modal-container")[0];
-                    var style = window.getComputedStyle(viewModal, null);
-                    
-                    console.log('style:' );
-                    modalHeight = style.height ;
-                    
-                    
-                    console.log(modalHeight);
-                    if(style.height == "auto"){
-                        console.log("Failed to calculate the height, Setting Default");
-                        modalHeight = "505px";
-                    }
-                    
-                }catch(e){
-                    modalHeight = "505px";
-                }
-                
-                //console.log(panelFieldsHtml);
-                
-                jsonObj.conf.modalHeight = modalHeight;
-                
-                //construct the final feedback form object
-                formObject.data.json = jsonObj;
-                formObject.data.html = $('#viewModal').html() || " <html> CUSTOM ERROR: NONTYPE </html>";
-                formObject.status = "DONE" ;
-                
-                console.log(formObject);
-                
-                //window.sendMessage(formObject,'http://localhost');
-                window.sendMessage(formObject,'http://clients.staging.viralmint.com');
 
-                
-            });
-            
-        });
-        
-        
-        var vmlib = {
-            showLivePromo : function(){
-                console.log('called');
-                //processFormElements();
-                
-                $("#processContainer").html($("#formHTMLEditContainer").html());
-            
-                //remove content editable properties
-                
-                $('#processContainer').find('.formHeading').removeAttr('contenteditable');
-                $('#processContainer').find('.formDescription').removeAttr('contenteditable');
-                //$(".formHeading")[1].removeAttribute('contenteditable');
-                //$(".formDescription")[1].removeAttribute('contenteditable');
-                
-                var panelText = $('#processContainer').find('.panel-text');
-
-                for(i=0; i < panelText.length ; i++){
-                    panelText[i].removeAttribute('contenteditable');
-                }
-                
-                var removable =  $('#processContainer').find('.removable');
-                for(i=0; i < removable.length ; i++){
-                    removable[i].remove();
-                }
-
-               $("#viewModal").html($("#processContainer").html());
-                
-                $("#processContainer").html('');
-               $("#editModal").modal('hide');
-               $("#viewModal").modal({});
-            
-                
-            }
-        }
-
-    </script>
     
     
     <!-- Script for sending and accepting the postMessages from the parent window    -->
@@ -285,7 +107,14 @@
             // Check to make sure that this message came from the correct domain.
             //    if (e.origin !== "http://www.viralmint.com")
             //      return;
-              console.log(e);
+            
+            console.log(e);
+                
+            if(typeof e.data == 'object' ){
+                window.triggerFormEdit();
+            }else if(typeof e.data == 'string'){
+                window.triggerDefault();
+            }
 
             // Update the div element to display the message.
             //Do what ever with the message 
@@ -397,44 +226,10 @@
                                             <span class="glyphicon glyphicon-remove"></span>
                                     </a>
                                </span>
-                               <div class="panel-default" id="panel-elements">
-                                    <div class="panel-heading"> 
-                                        <span class="glyphicon glyphicon-thumbs-up"> </span>
-                                        <span class="panel-text" style="padding-left:5px" contenteditable="true" >Like</span>
-                                         <div class="removable edit-remove-element" remove-element="">
-                                            <a href="#"  class="remove-anchor" style="color:#A82400; text-decoration:none">
-                                            <span class="glyphicon glyphicon-remove"></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="panel-heading"> 
-                                        <span class="glyphicon glyphicon-pencil"> </span>
-                                        <span class="panel-text" style="padding-left:5px" contenteditable="true" >Question</span> 
-                                        <div class="removable edit-remove-element" remove-element="">
-                                            <a href="#" class="remove-anchor" style="color:#A82400; text-decoration:none">
-                                            <span class="glyphicon glyphicon-remove"></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="panel-heading"> 
-                                        <span class="glyphicon glyphicon-comment"> </span>
-                                        <span class="panel-text" style="padding-left:5px" contenteditable="true" >Suggestion</span> 
-                                        <div class="removable edit-remove-element" remove-element="">
-                                            <a href="#"  class="remove-anchor" style="color:#A82400; text-decoration:none">
-                                            <span class="glyphicon glyphicon-remove"></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="panel-heading"> 
-                                        <span class="glyphicon glyphicon-pushpin"> </span>
-                                        <span class="panel-text" style="padding-left:5px" contenteditable="true" >Problem</span> 
-                                        <div class="removable edit-remove-element" remove-element="">
-                                            <a href="#"  class="remove-anchor" style="color:#A82400; text-decoration:none">
-                                            <span class="glyphicon glyphicon-remove"></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                               
+                                <!-- The panel elements container for containing listGroup elements -->
+                                <div id="panel-elments-container"></div>
+                                
                                 <div class="removable" align="center" style="padding-top:10px">
                                     <a href="#" class="add-panel-element"> <span class="glyphicon glyphicon-plus">Add</span> </a>
                                 </div>
@@ -505,6 +300,19 @@
         </div>
         <div class="col-md-2"> <a href="#"  class="remove-anchor" style="color:#A82400; text-decoration:none"><span class="glyphicon glyphicon-remove"></span></a></div>
     </script>
+    
+    <script type="text/template" id="panelElementsTemplate">
+        <div class="panel-heading"> 
+            <span class="glyphicon glyphicon-thumbs-up"> </span>
+            <span class="panel-text" style="padding-left:5px" contenteditable="true" >Like {{name}}</span>
+             <div class="removable edit-remove-element" remove-element="">
+                <a href="#"  class="remove-anchor" style="color:#A82400; text-decoration:none">
+                <span class="glyphicon glyphicon-remove"></span>
+                </a>
+            </div>
+        </div>
+    </script>
+    
      
     <script type="text/template" id="inputBoxtemplate">
         <div class="col-md-10" style="padding-bottom:3px;"><span style=" padding:2px; font-size:12px;" >{{ fieldHelp }}</span></div>
@@ -574,17 +382,213 @@
     <script src="../../app/backbone/views/feedbackViews.js"></script>
     
     
-
+    <!-- Script to handle app trigger and backbone objects -->
     <script type="text/javascript">
         
         window.formElementCollection = new app.Collections.FormElementCollection;
-        var router = new app.mainRoutes({
-            formElementCollection : window.formElementCollection
-        });
+        
+        var triggerDefault = function(){
+            var router = new app.mainRoutes({
+                formElementCollection : window.formElementCollection
+            });
+            
+            performFormBuild();
+        }
+        
+        var triggerFormEdit = function(){
+            var router = new app.mainRoutes({
+                formElementCollection : window.formElementCollection
+            });
+        }
+        
 
          //initiate Backbone to listen to the urls
         Backbone.history.start();
     </script>
+    
+    <!--  Script to habndle the building the form   -->
+    <script type="text/javascript">
+        
+        window.id = 0;
+
+        var performFormBuild = function(){
+
+            $('#output , #editbtngrp').hide();
+            vmlib.showLivePromo();
+
+            $('.add-panel-element').click(function(){
+
+                console.log("Added the element");
+
+
+                var panelElement = '<div class="panel-heading"> <span class="glyphicon glyphicon-shopping-cart"> </span><span class="panel-text" style="padding-left:5px" contenteditable="true" >Click her to edit the text</span><div class="removable edit-remove-element" remove-element=""><a href="#"  class="remove-anchor" style="color:#A82400; text-decoration:none"><span class="glyphicon glyphicon-remove"></span></a></div></div>'
+
+                $('#panel-elements').append(panelElement);
+                $('.panel-heading').hover(function(){
+
+                $('.panel-heading').find('.edit-remove-element').css('display','none');
+                $(this).find('.edit-remove-element').css('display','block');
+
+            });
+
+            });
+
+            $('#liveViewPromoBtn').click(function(){
+                $("#done-btn").show();
+                $("#edit-form").show();
+                $("#liveViewPromoBtn").hide();
+                vmlib.showLivePromo();    
+            });
+
+
+            $('.panel-heading').hover(function(){    
+                $('.panel-heading').find('.edit-remove-element').css('display','none');
+                $(this).find('.edit-remove-element').css('display','block');
+            });
+
+//            $('.form-element').hover(function(){
+//                $('.panel-heading').find('.edit-remove-element').css('display','none');
+//                $(this).find('.edit-remove-element').css('display','block');
+//            });
+
+            $('.panel-default').mouseleave(function(){
+               $('.edit-remove-element').css('display','none'); 
+            });
+
+            $("#continue-form").click(function(){
+                $("#viewModal").modal('hide');
+                $("#processContainer , #viewModal").html('');
+                $("#actionbtngrp").hide();
+            });
+
+            $(".edit-form").click(function(){
+                $("#processContainer , #viewModal").html('');
+                $("#viewModal").modal('hide');
+                $("#editModal").modal('show');
+                $("#actionbtngrp").hide();
+                $("#editbtngrp").show();
+                $("#liveViewPromoBtn").show();
+                $("#done-btn").hide();
+                $("#edit-form").hide();
+            });
+
+            $("#done-btn , #continue-form").click(function(){
+
+                var formObject = {
+                    data : {
+                        json : {},
+                        html : ""
+                    },
+                    status : ""
+                };
+
+                var panelFieldsHtml = $('#viewModal').find('.panel-text');
+                var formListGroup = [];
+                panelFieldsHtml.each(function(index,el){
+
+                    var listGroupElement = {
+                        gicon : el.previousSibling.previousSibling.getAttribute('class'), 
+                        elementText : el.innerHTML
+                    };
+                    formListGroup.push(listGroupElement);
+                });
+
+                var formAllElements = [];
+                formElementCollection.models.forEach(function(el,i){
+                    formAllElements.push(el.attributes);
+                });
+
+
+
+                var jsonObj = {
+                    formHeading : $('#viewModal').find('.formHeading').html() || "",
+                    formDescription : $('#viewModal').find('.formDescription').html() || "",
+                    formListGroup : formListGroup,
+                    formAllElements : formAllElements,
+                    conf : {
+                        modalHeight : "505px"
+                    }
+                }
+
+                var modalHeight = "505px" ;
+
+                //computing height for the view modal
+                try{
+                    var viewModal = document.getElementsByClassName("view-modal-container")[0];
+                    var style = window.getComputedStyle(viewModal, null);
+
+                    console.log('style:' );
+                    modalHeight = style.height ;
+
+
+                    console.log(modalHeight);
+                    if(style.height == "auto"){
+                        console.log("Failed to calculate the height, Setting Default");
+                        modalHeight = "505px";
+                    }
+
+                }catch(e){
+                    modalHeight = "505px";
+                }
+
+                //console.log(panelFieldsHtml);
+
+                jsonObj.conf.modalHeight = modalHeight;
+
+                //construct the final feedback form object
+                formObject.data.json = jsonObj;
+                formObject.data.html = $('#viewModal').html() || " <html> CUSTOM ERROR: NONTYPE </html>";
+                formObject.status = "DONE" ;
+
+                console.log(formObject);
+
+                //window.sendMessage(formObject,'http://localhost');
+                window.sendMessage(formObject,'http://clients.staging.viralmint.com');
+
+
+            });
+
+        }
+
+
+        var vmlib = {
+            showLivePromo : function(){
+            console.log('called');
+            //processFormElements();
+
+            $("#processContainer").html($("#formHTMLEditContainer").html());
+
+            //remove content editable properties
+
+            $('#processContainer').find('.formHeading').removeAttr('contenteditable');
+            $('#processContainer').find('.formDescription').removeAttr('contenteditable');
+            //$(".formHeading")[1].removeAttribute('contenteditable');
+            //$(".formDescription")[1].removeAttribute('contenteditable');
+
+            var panelText = $('#processContainer').find('.panel-text');
+
+            for(i=0; i < panelText.length ; i++){
+                panelText[i].removeAttribute('contenteditable');
+            }
+
+            var removable =  $('#processContainer').find('.removable');
+            for(i=0; i < removable.length ; i++){
+                removable[i].remove();
+            }
+
+           $("#viewModal").html($("#processContainer").html());
+
+            $("#processContainer").html('');
+           $("#editModal").modal('hide');
+           $("#viewModal").modal({});
+
+
+        }
+        }
+
+    </script>
+    
+    
 </body>
 
 </html>
