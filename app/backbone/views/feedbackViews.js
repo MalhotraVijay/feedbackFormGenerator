@@ -39,14 +39,19 @@ app.Views.FormIndexView = Backbone.View.extend({
         //add the panel elements in the desired container
         
         var addPanelView = new app.Views.AddPanelView(this.jsonData);
-        
+	
+	console.log(addPanelView.render().el);
+	console.log(addPanelView.render().$el.html()); 	
+       
         $("#panel-elments-container").html(addPanelView.render().el);
-        
+	        
+	console.log($('#panel-elments-container').html());
         
         //call the addNewElement to call the init for adding new product.
         var formAddNewView = new app.Views.FormAddNewView(this.jsonData);
         
         $("#primaryTemplate").html(formAddNewView.render().el);
+	console.log('primary template', $('#primaryTemplate'));
         formAddNewView.addDefault();
         
     },
@@ -73,7 +78,7 @@ app.Views.FormIndexView = Backbone.View.extend({
     
     removePanelElement : function(ev){
         
-        console.log('Remove element');
+        //console.log('Remove element');
         //remove the parent element of the clicked cancle button
         $(ev.currentTarget).parent().parent().remove();
         
@@ -101,7 +106,7 @@ app.Views.FormAddNewView = Backbone.View.extend({
     addDefault : function(){
         
         //adding the default objects sent in the json created in the app router init call
-        console.log("In the form view edit function", this.jsonData);
+        //console.log("In the form view edit function", this.jsonData);
         
         var jsonData = this.jsonData;
         
@@ -148,7 +153,7 @@ app.Views.FormAddNewView = Backbone.View.extend({
         
         //add to the new model everytime to the collection
         formElementCollection.add(formElement);
-        console.log(formElementCollection);
+        //console.log(formElementCollection);
 
         //call the view for the collection
         var formElementCollectionView = new app.Views.FormElementCollectionView({ collection : formElementCollection });
@@ -185,8 +190,9 @@ app.Views.AddPanelView = Backbone.View.extend({
     
     render : function(){
         console.log("Adding the div,", this.jsonData);
-            
         this.$el.html(this.templates.panelElementsTemplate(this.jsonData));
+	console.log(this.el);
+	console.log(this.$el.html());
         return this;
     }
     
@@ -214,14 +220,14 @@ app.Views.FormElementAddView = Backbone.View.extend({
 
     initialize: function (options) {
         this.formElementCollection = options.formElementCollection;
-        console.log('Form Add Single Element initialized', this);
+        //console.log('Form Add Single Element initialized', this);
     },
 
     render: function () {
         var formElement = this.model;
         var templateName = this.checkForType(formElement);
         
-        console.log(this.model.toJSON());
+        //console.log(this.model.toJSON());
         
         this.$el.html(this.templates[templateName](this.model.toJSON()));
         return this;
@@ -244,7 +250,7 @@ app.Views.FormElementAddView = Backbone.View.extend({
     },
     
     destroy: function(){
-        console.log("clicked", this);
+        //console.log("clicked", this);
         this.formElementCollection.remove(this.model);
         this.$el.remove();
     }
@@ -256,12 +262,12 @@ app.Views.FormElementCollectionView = Backbone.View.extend({
     tagName: 'div',
     className: 'row form-container',
     initialize: function (options) {
-        console.log('Form View Collection initialized' , this);
+        //console.log('Form View Collection initialized' , this);
         //this.render();
     },
     render: function () {
         this.collection.each(this.addOne, this);
-        console.log(this.el);
+        //console.log(this.el);
         return this;
     },
     addOne : function(formElement){

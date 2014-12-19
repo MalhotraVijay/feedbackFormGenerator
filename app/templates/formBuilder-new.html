@@ -108,12 +108,14 @@
             //    if (e.origin !== "http://www.viralmint.com")
             //      return;
             
-            console.log(e);
+            console.log("received message from : " , e);
                 
             if(typeof e.data == 'object' ){
+		console.log('Triggering the form edit case', e.data);
                 window.editJsonData = e.data;
                 window.triggerFormEdit();
             }else if(typeof e.data == 'string'){
+		console.log('Triggereing the Default case');
                 window.triggerDefault();
             }
 
@@ -161,7 +163,7 @@
             <!-- Contains the inital actions -->
             <div id="actionbtngrp" style="z-index:20000; position:fixed; top : 100px;">
                 <div class="btn-group-vertical">
-                   <button class="btn btn-primary" id="continue-form">Continue with default form</button>
+                   <!-- <button class="btn btn-primary" id="continue-form">Continue with default form</button> -->
                    <br>
                    <button class="btn btn-success edit-form" id="edit-form">Edit this form</button>
                    <br>
@@ -438,6 +440,8 @@
         }
         
         var triggerFormEdit = function(){
+	
+	    console.log("Reaching here ",window.editJsonData);
             var router = new app.mainRoutes({
                 formElementCollection : window.formElementCollection,
                 jsonData : window.editJsonData
@@ -464,7 +468,7 @@
 
             $('.add-panel-element').click(function(){
 
-                console.log("Added the element");
+                //console.log("Added the element");
 
 
                 var panelElement = '<div class="panel-heading"> <span class="glyphicon glyphicon-shopping-cart"> </span><span class="panel-text" style="padding-left:5px" contenteditable="true" >Click her to edit the text</span><div class="removable edit-remove-element" remove-element=""><a href="#"  class="remove-anchor" style="color:#A82400; text-decoration:none"><span class="glyphicon glyphicon-remove"></span></a></div></div>'
@@ -502,9 +506,9 @@
             });
 
             $("#continue-form").click(function(){
-                $("#viewModal").modal('hide');
-                $("#processContainer , #viewModal").html('');
-                $("#actionbtngrp").hide();
+               // $("#viewModal").modal('hide');
+               // $("#processContainer , #viewModal").html('');
+               // $("#actionbtngrp").hide();
             });
 
             $(".edit-form").click(function(){
@@ -534,7 +538,7 @@
                     
                     previousEl = el.previousSibling;
                     
-                    console.log(previousEl.nodeName);
+                    //console.log(previousEl.nodeName);
                     
                     var gicon = (previousEl.nodeName == '#text' ? previousEl.previousSibling.getAttribute('class'): previousEl.getAttribute('class') );
                     
@@ -573,9 +577,9 @@
                     modalHeight = style.height ;
 
 
-                    console.log(modalHeight);
+                    //console.log(modalHeight);
                     if(style.height == "auto"){
-                        console.log("Failed to calculate the height, Setting Default");
+                        //console.log("Failed to calculate the height, Setting Default");
                         modalHeight = "505px";
                     }
 
@@ -592,10 +596,10 @@
                 formObject.data.html = $('#viewModal').html() || " <html> CUSTOM ERROR: NONTYPE </html>";
                 formObject.status = "DONE" ;
 
-                console.log(formObject);
+                //console.log(formObject);
 
-                //window.sendMessage(formObject,'http://localhost');
-                window.sendMessage(formObject,'http://clients.staging.viralmint.com');
+                window.sendMessage(formObject,'http://localhost');
+                //window.sendMessage(formObject,'http://clients.viralmint.com');
 
 
             });
@@ -605,7 +609,7 @@
 
         var vmlib = {
             showLivePromo : function(){
-            console.log('called');
+            //console.log('called');
             //processFormElements();
 
             $("#processContainer").html($("#formHTMLEditContainer").html());

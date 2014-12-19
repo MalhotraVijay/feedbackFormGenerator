@@ -14,11 +14,11 @@ app.mainRoutes = Backbone.Router.extend({
     
     initialize: function(options){
         //for the default url the form will be added to the DOM
-        console.log(options.formElementCollection);
+        //console.log(options.formElementCollection);
         
         this.formElementCollection = options.formElementCollection;
         this.jsonData = options.jsonData;
-        
+       console.log('In the initialize function: ', this); 
         this.formElementCollection.bind('remove', this.updateDebug, this);
         this.formElementCollection.bind('updateAll', this.updateDebug, this);
         
@@ -27,7 +27,7 @@ app.mainRoutes = Backbone.Router.extend({
     
     updateDebug : function(){
         
-        console.log(this);
+        //console.log(this);
         //Can remove this code and ADD some where to remove redundancy
          //call the view for the collection
         var formElementCollectionView = new app.Views.FormElementCollectionView({ collection : this.formElementCollection });
@@ -55,7 +55,7 @@ app.mainRoutes = Backbone.Router.extend({
     
     index: function () {
         //get the currentView and add that to the viewport
-        console.log(this.jsonData);
+        //console.log(this.jsonData);
         this.currentView = new app.Views.FormIndexView(this.jsonData); 
         $('#formHTMLEditContainer').html(this.currentView.render().el);
         
