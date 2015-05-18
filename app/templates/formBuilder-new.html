@@ -506,9 +506,9 @@
             });
 
             $("#continue-form").click(function(){
-               // $("#viewModal").modal('hide');
-               // $("#processContainer , #viewModal").html('');
-               // $("#actionbtngrp").hide();
+                $("#viewModal").modal('hide');
+                $("#processContainer , #viewModal").html('');
+                $("#actionbtngrp").hide();
             });
 
             $(".edit-form").click(function(){
@@ -598,8 +598,8 @@
 
                 //console.log(formObject);
 
-                window.sendMessage(formObject,'http://localhost');
-                //window.sendMessage(formObject,'http://clients.viralmint.com');
+                //window.sendMessage(formObject,'http://localhost');
+                window.sendMessage(formObject,'http://clients.viralmint.com');
 
 
             });
@@ -614,6 +614,13 @@
 
             $("#processContainer").html($("#formHTMLEditContainer").html());
 
+	if($("#processContainer").find('#primaryTemplate').html() === ""){
+		$("#processContainer").find('#primaryTemplate').html($("#viewModal").find('#primaryTemplate').html());
+	}
+
+	if($("#processContainer").find('#panel-elments-container').html() == ""){
+		$("#processContainer").find('#panel-elments-container').html($("#viewModal").find('#panel-elments-container').html());
+	}
             //remove content editable properties
 
             $('#processContainer').find('.formHeading').removeAttr('contenteditable');
@@ -631,6 +638,8 @@
             for(i=0; i < removable.length ; i++){
                 removable[i].remove();
             }
+
+
 
            $("#viewModal").html($("#processContainer").html());
 
