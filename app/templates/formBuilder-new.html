@@ -654,21 +654,36 @@
             },
 
             makeDraggable : function(){
-                
-                    $(".form-element").draggable('destroy');
+
+                var isDraggable = 1;
+
+                if($(".form-element").draggable('instance') === undefined){
                     $(".form-element").draggable({
                         axis: "y",
                         containment : "parent"
                     });
+                }else{
+                    $(".form-element").draggable('destroy');
+                    isDraggable = 0;
+                }
                 
-                    $(".panel-heading").draggable('destroy');
+                if($(".panel-heading").draggable('instance') === undefined){
                     $(".panel-heading").draggable({
                         axis: "y",
                         containment : "parent"
-                    });    
-                
+                    });
+                }else{
+                    $(".panel-heading").draggable('destroy');
+                    isDraggable = 0;
+                }
+
+                if(isDraggable === 0){
+                    this.makeDraggable();
+                }
+                    
             },
             disableDraggable : function(){
+
                 $('.form-element').draggable('disable');
                 $('.panel-heading').draggable('disable');
 
