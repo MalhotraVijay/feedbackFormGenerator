@@ -62,6 +62,8 @@ app.Views.FormIndexView = Backbone.View.extend({
         
         $('.form-layer').css('display','block');
         
+        
+
         $('select#fieldType').change(function(){
             if($(this).val()=="checkBox"||
                 $(this).val() == "radioButton" ||

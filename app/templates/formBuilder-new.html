@@ -483,6 +483,8 @@
 
                 });
 
+                vmlib.makeDraggable();
+
             });
 
             $('#liveViewPromoBtn').click(function(){
@@ -652,35 +654,36 @@
             },
 
             makeDraggable : function(){
-                if($('.form-element').draggable('instance') === undefined ){
+                
+                    $(".form-element").draggable('destroy');
                     $(".form-element").draggable({
                         axis: "y",
                         containment : "parent"
-                    });    
-                }else{}
-
-                if($('.panel-heading').draggable('instance') === undefined ){
+                    });
+                
+                    $(".panel-heading").draggable('destroy');
                     $(".panel-heading").draggable({
                         axis: "y",
                         containment : "parent"
                     });    
-                }else{}
                 
             },
             disableDraggable : function(){
                 $('.form-element').draggable('disable');
                 $('.panel-heading').draggable('disable');
 
-                $('.form-element, .panel-heading').css({cursor : 'auto'});
-                $('.form-element').css({border : 'none'});
-
+                $('.form-element, .panel-heading').css({
+                    cursor : 'auto',
+                    border : 'none'
+                });
             },
             enableDraggable : function(){
                 $('.form-element').draggable('enable');
                 $('.panel-heading').draggable('enable');
-                $('.form-element, .panel-heading').css({cursor : 'move'});
-
-                $('.form-element').css({border : 'thin dashed #000'})
+                $('.form-element, .panel-heading').css({
+                    cursor : 'move',
+                    border : 'thin dashed #000'                   
+                });
             }
         }
 
