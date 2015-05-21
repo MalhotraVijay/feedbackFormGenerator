@@ -62,7 +62,6 @@ app.Views.FormIndexView = Backbone.View.extend({
         
         $('.form-layer').css('display','block');
         
-        
 
         $('select#fieldType').change(function(){
             if($(this).val()=="checkBox"||
@@ -165,6 +164,8 @@ app.Views.FormAddNewView = Backbone.View.extend({
         
         $('#user_input').html(formHTML);
 
+        vmlib.makeDraggable();
+
         //add the form text to the html
         var formHtmlCode = $('#feebackFormHtmlContainer').html() || "";
         formHtmlCode = formHtmlCode.replace(/<a href="#" class="delete btn btn-small btn-danger pull-right">X<\/a>/g,'')
@@ -215,8 +216,7 @@ app.Views.FormElementAddView = Backbone.View.extend({
     },
     
     events:{
-        "click a.delete": "destroy",
-       
+        "click a.delete": "destroy", 
     },
 
 
