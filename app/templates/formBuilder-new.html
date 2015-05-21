@@ -657,18 +657,18 @@
             makeDraggable : function(){
 
 
-                $(".form-element").sortable({
+                $(".form-container").sortable({
                 });
 
-                $(".panel-heading").sortable({
+                $("#panel-elements").sortable({
                 });
 
                     
             },
             disableDraggable : function(){
 
-                $('.form-element').sortable('disable');
-                $('.panel-heading').sortable('disable');
+                $('.form-container').sortable('disable');
+                $('#panel-elements').sortable('disable');
 
                 $('.form-element, .panel-heading').css({
                     cursor : 'auto',
@@ -676,8 +676,8 @@
                 });
             },
             enableDraggable : function(){
-                $('.form-element').sortable('enable');
-                $('.panel-heading').sortable('enable');
+                $('.form-container').sortable('enable');
+                $('#panel-elements').sortable('enable');
                 $('.form-element, .panel-heading').css({
                     cursor : 'move',
                     border : 'thin dashed #000'                   
