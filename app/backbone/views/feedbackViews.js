@@ -165,6 +165,7 @@ app.Views.FormAddNewView = Backbone.View.extend({
         $('#user_input').html(formHTML);
 
         vmlib.makeDraggable();
+        vmlib.enableDraggable();
 
         //add the form text to the html
         var formHtmlCode = $('#feebackFormHtmlContainer').html() || "";
