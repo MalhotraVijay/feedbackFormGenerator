@@ -656,48 +656,19 @@
 
             makeDraggable : function(){
 
-                var isDraggable = 1;
 
-                $(".form-element").draggable({
-                        axis: "y",
-                        containment : "parent"
+                $(".form-element").sortable({
                 });
 
-                $(".panel-heading").draggable({
-                        axis: "y",
-                        containment : "parent"
+                $(".panel-heading").sortable({
                 });
 
-
-                // if($(".form-element").draggable('instance') === undefined){
-                //     $(".form-element").draggable({
-                //         axis: "y",
-                //         containment : "parent"
-                //     });
-                // }else{
-                //     $(".form-element").draggable('destroy');
-                //     isDraggable = 0;
-                // }
-                
-                // if($(".panel-heading").draggable('instance') === undefined){
-                //     $(".panel-heading").draggable({
-                //         axis: "y",
-                //         containment : "parent"
-                //     });
-                // }else{
-                //     $(".panel-heading").draggable('destroy');
-                //     isDraggable = 0;
-                // }
-
-                // if(isDraggable === 0){
-                //     this.makeDraggable();
-                // }
                     
             },
             disableDraggable : function(){
 
-                $('.form-element').draggable('disable');
-                $('.panel-heading').draggable('disable');
+                $('.form-element').sortable('disable');
+                $('.panel-heading').sortable('disable');
 
                 $('.form-element, .panel-heading').css({
                     cursor : 'auto',
@@ -705,8 +676,8 @@
                 });
             },
             enableDraggable : function(){
-                $('.form-element').draggable('enable');
-                $('.panel-heading').draggable('enable');
+                $('.form-element').sortable('enable');
+                $('.panel-heading').sortable('enable');
                 $('.form-element, .panel-heading').css({
                     cursor : 'move',
                     border : 'thin dashed #000'                   
