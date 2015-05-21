@@ -460,15 +460,6 @@
     
     <!--  Script to habndle the building the form   -->
     <script type="text/javascript">
-
-      $(document).ready(function(){
-     
-      $(".form-element").draggable({
-      axis: "y",
-      containment : "user_input"
-      });
-      
-      });
         
         window.id = 0;
 
@@ -487,10 +478,10 @@
                 $('#panel-elements').append(panelElement);
                 $('.panel-heading').hover(function(){
 
-                $('.panel-heading').find('.edit-remove-element').css('display','none');
-                $(this).find('.edit-remove-element').css('display','block');
+                    $('.panel-heading').find('.edit-remove-element').css('display','none');
+                    $(this).find('.edit-remove-element').css('display','block');
 
-            });
+                });
 
             });
 
@@ -507,10 +498,6 @@
                 $(this).find('.edit-remove-element').css('display','block');
             });
 
-//            $('.form-element').hover(function(){
-//                $('.panel-heading').find('.edit-remove-element').css('display','none');
-//                $(this).find('.edit-remove-element').css('display','block');
-//            });
 
             $('.panel-default').mouseleave(function(){
                $('.edit-remove-element').css('display','none'); 
@@ -531,6 +518,8 @@
                 $("#liveViewPromoBtn").show();
                 $("#done-btn").hide();
                 $("#edit-form").hide();
+
+                vmlib.enableDraggable();
             });
 
             $("#done-btn , #continue-form").click(function(){
@@ -620,46 +609,63 @@
 
         var vmlib = {
             showLivePromo : function(){
-            //console.log('called');
-            //processFormElements();
 
-            $("#processContainer").html($("#formHTMLEditContainer").html());
+                $("#processContainer").html($("#formHTMLEditContainer").html());
 
-	if($("#processContainer").find('#primaryTemplate').html() === ""){
-		$("#processContainer").find('#primaryTemplate').html($("#viewModal").find('#primaryTemplate').html());
-	}
+            	if($("#processContainer").find('#primaryTemplate').html() === ""){
+            		$("#processContainer").find('#primaryTemplate').html($("#viewModal").find('#primaryTemplate').html());
+            	}
 
-	if($("#processContainer").find('#panel-elments-container').html() == ""){
-		$("#processContainer").find('#panel-elments-container').html($("#viewModal").find('#panel-elments-container').html());
-	}
-            //remove content editable properties
+            	if($("#processContainer").find('#panel-elments-container').html() == ""){
+            		$("#processContainer").find('#panel-elments-container').html($("#viewModal").find('#panel-elments-container').html());
+            	}
+                //remove content editable properties
 
-            $('#processContainer').find('.formHeading').removeAttr('contenteditable');
-            $('#processContainer').find('.formDescription').removeAttr('contenteditable');
-            //$(".formHeading")[1].removeAttribute('contenteditable');
-            //$(".formDescription")[1].removeAttribute('contenteditable');
+                $('#processContainer').find('.formHeading').removeAttr('contenteditable');
+                $('#processContainer').find('.formDescription').removeAttr('contenteditable');
+                //$(".formHeading")[1].removeAttribute('contenteditable');
+                //$(".formDescription")[1].removeAttribute('contenteditable');
 
-            var panelText = $('#processContainer').find('.panel-text');
+                var panelText = $('#processContainer').find('.panel-text');
 
-            for(i=0; i < panelText.length ; i++){
-                panelText[i].removeAttribute('contenteditable');
+                for(i=0; i < panelText.length ; i++){
+                    panelText[i].removeAttribute('contenteditable');
+                }
+
+                var removable =  $('#processContainer').find('.removable');
+                for(i=0; i < removable.length ; i++){
+                    removable[i].remove();
+                }
+
+
+
+                $("#viewModal").html($("#processContainer").html());
+
+                $("#processContainer").html('');
+                $("#editModal").modal('hide');
+                $("#viewModal").modal({});
+
+                this.makeDraggable();
+                this.disableDraggable();
+
+
+            },
+
+            makeDraggable : function(){
+                if($('.form-element').draggable('instance') === undefined ){
+                    $(".form-element").draggable({
+                        axis: "y",
+                        containment : "parent"
+                    });    
+                }else{}
+                
+            },
+            disableDraggable : function(){
+                $('.form-element').draggable('disable');
+            },
+            enableDraggable : function(){
+                $('.form-element').draggable('enable');
             }
-
-            var removable =  $('#processContainer').find('.removable');
-            for(i=0; i < removable.length ; i++){
-                removable[i].remove();
-            }
-
-
-
-           $("#viewModal").html($("#processContainer").html());
-
-            $("#processContainer").html('');
-           $("#editModal").modal('hide');
-           $("#viewModal").modal({});
-
-
-        }
         }
 
     </script>
