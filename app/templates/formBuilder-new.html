@@ -11,6 +11,8 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700' rel='stylesheet' type='text/css'>
     <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
      
     <script src="../../bower_components/underscore/underscore.js"></script>
     <script src="../../bower_components/backbone/backbone.js"></script>
@@ -458,6 +460,15 @@
     
     <!--  Script to habndle the building the form   -->
     <script type="text/javascript">
+
+      $(document).ready(function(){
+     
+      $(".form-element").draggable({
+      axis: "y",
+      containment : "user_input"
+      });
+      
+      });
         
         window.id = 0;
 
